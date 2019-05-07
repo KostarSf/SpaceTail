@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace SpaceAvenger
@@ -91,6 +92,7 @@ namespace SpaceAvenger
             sceneManager = new SceneManager(gameInterface);
             //sceneManager.LoadScene("StartScene");
             sceneManager.PlayStartScene();
+            sceneManager.PlayMenuScene();
         }
     }
 
@@ -224,6 +226,11 @@ namespace SpaceAvenger
         {
             startScene.start();
         }
+
+        internal void PlayMenuScene()
+        {
+            
+        }
     }
 
     class Scene
@@ -256,7 +263,25 @@ namespace SpaceAvenger
 
     class StartScene : Scene
     {
-        
+        string[] spriteAuthor = {
+            ".    ___   ____                                               .",
+            ".   /   | /   /                      _                        .",
+            ".   |   |/   /   ______   _______  _| |__   ______   ______   .",
+            ".   |       /   /  _   \\ /  ____/ |_   __| /  _   \\ |  ___/   .",
+            ".   |       \\   | | |  | | |____    | |    | |_|  | | |       .",
+            ".   |   |\\   \\  | |_|  | \\____  \\   | |___ |  _   | | |       .",
+            ".   |___| \\___\\ \\______/ /______/   |____/ |_| |__| |_|       .",
+            ".                                                             .",
+        };
+
+        string[] spriteTitle = {
+            ".                                                 .",
+            ".   __                                            .",
+            ".  (_  ._   _.  _  _   /\\      _  ._   _   _  ._  .",
+            ".  __) |_) (_| (_ (/_ /--\\ \\/ (/_ | | (_| (/_ |   .",
+            ".      |                               _|         .",
+            ".                                                 .",
+        };
 
         public StartScene(Interface gameInterface)
         {
@@ -265,10 +290,52 @@ namespace SpaceAvenger
 
         public void start()
         {
-            FillScreen();
+            drawTransition("*", "#", 10);
+            fillScreen();
+            drawSprite(spriteAuthor);
+
+            Thread.Sleep(2000);
+
+            fillScreen();
+            drawSprite(spriteTitle);
+
+            Thread.Sleep(3000);
+
+            drawTransition(" ", "#", 20);
         }
 
-        private void FillScreen()
+        private void drawTransition(string bg, string edge, int speed)
+        {
+            for (int i = getBorder(Side.Left); i <= getBorder(Side.Right); i++)
+            {
+                for (int j = getBorder(Side.Top); j <= getBorder(Side.Bottom); j++)
+                {
+                    Console.SetCursorPosition(i, j);
+
+                    if (i == getBorder(Side.Right))
+                        Console.Write($"{bg}");
+                    else
+                        Console.Write($"{bg}{edge}");
+                }
+
+                Thread.Sleep(speed);
+            }
+        }
+
+        private void drawSprite(string[] sprite)
+        {
+            int leftStartPoint = Console.WindowWidth / 2 - sprite[0].Length / 2;
+            int topStartPoint = Console.WindowHeight / 2 - sprite.Length / 2;
+
+            int row = 0;
+            for (int i = topStartPoint; i < topStartPoint+sprite.Length; i++)
+            {
+                Console.SetCursorPosition(leftStartPoint, i);
+                Console.Write(sprite[row++]);
+            }
+        }
+
+        private void fillScreen()
         {
             for (int i = getBorder(Side.Top); i <= getBorder(Side.Bottom); i++)
             {
