@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace SpaceAvenger
+namespace SpaceTail
 {
     class Program
     {
@@ -26,10 +26,11 @@ namespace SpaceAvenger
         [DllImport("kernel32.dll", ExactSpelling = true)]
         private static extern IntPtr GetConsoleWindow();
 
-        public static string title = "Space Avenger";
+        public static string title = "SpaceTail";
         public static string version = "v1.0";
+        //80 20
         private static int consoleWidth = 80;
-        private static int consoleHeight = 20;
+        private static int consoleHeight = 25;
         public static string author = "kostar";
 
         static void Main(string[] args)
@@ -67,7 +68,7 @@ namespace SpaceAvenger
 
         private static void waitInputForQuit()
         {
-            string text = "Программа завершена. Нажмите любую клавишу для выхода";
+            string text = "Программа завершена. Нажмите любую клавишу для выхода ";
 
             Console.Clear();
             Console.CursorVisible = true;
@@ -223,11 +224,31 @@ namespace SpaceAvenger
             startScene = new StartScene(gameInterface);
 
             mainMenu = new MenuScene(gameInterface);
-            mainMenu.addItem(new MenuItem("Начать Игру", gameMenu, true));
-            mainMenu.addItem(new MenuItem("Рекорды", scoreMenu));
-            mainMenu.addItem(new MenuItem("Настройки", optionsMenu));
-            mainMenu.addItem(new MenuItem("Об Игре", aboutMenu));
-            mainMenu.addItem(new MenuItem("Выход", exitMenu));
+            aboutMenu = new MenuScene(gameInterface);
+            exitMenu = new MenuScene(gameInterface);
+
+            mainMenu.addMenuItem(new MenuItem("Начать Игру", gameMenu, true));
+            mainMenu.addMenuItem(new MenuItem("Загрузить", gameMenu, false, false));
+            mainMenu.addVoidMenuItem();
+            mainMenu.addMenuItem(new MenuItem("Рекорды", scoreMenu));
+            mainMenu.addMenuItem(new MenuItem("Настройки", optionsMenu));
+            mainMenu.addMenuItem(new MenuItem("Об Игре", aboutMenu));
+            mainMenu.addVoidMenuItem();
+            mainMenu.addMenuItem(new MenuItem("Выход", exitMenu));
+
+            aboutMenu.addTextItem($"{Program.title} {Program.version}");
+            aboutMenu.addVoidMenuItem();
+            aboutMenu.addTextItem("Эта история повествует об одной");
+            aboutMenu.addTextItem("поняшке, затерявшейся в космосе.");
+            aboutMenu.addTextItem("Помогите же отважной Лаки Стар");
+            aboutMenu.addTextItem("вернуться домой!");
+            aboutMenu.addVoidMenuItem();
+            aboutMenu.addMenuItem(new MenuItem("Назад", mainMenu, true));
+
+            exitMenu.addTextItem("Выйти?");
+            exitMenu.addVoidMenuItem();
+            exitMenu.addMenuItem(new MenuItem("Нет", mainMenu, true));
+            exitMenu.addMenuItem(new MenuItem("Да", null));
         }
 
         public void LoadScene(string sceneName)
@@ -273,29 +294,132 @@ namespace SpaceAvenger
             return sceneBorders[(int)side];
         }
 
-        internal void drawSprite(string[] sprite)
+        internal void drawCenteredSprite(string[] sprite)
         {
-            int leftStartPoint = Console.WindowWidth / 2 - sprite[0].Length / 2;
+            int leftStartPoint = Console.WindowWidth / 2 - sprite[0].Length / 2 + 1;
             int topStartPoint = Console.WindowHeight / 2 - sprite.Length / 2;
 
             int row = 0;
             for (int i = topStartPoint; i < topStartPoint + sprite.Length; i++)
             {
-                Console.SetCursorPosition(leftStartPoint, i);
-                Console.Write(sprite[row++]);
+                int col = 0;
+                for (int j = leftStartPoint; j < leftStartPoint + sprite[row].Length; j++)
+                {
+                    if (i > getBorder(Side.Top) && i < getBorder(Side.Bottom)
+                        && j > getBorder(Side.Left) && j < getBorder(Side.Right))
+                    {
+                        Console.SetCursorPosition(j, i);
+                        Console.Write(sprite[row][col]);
+                    }
+                    col++;
+                }
+                row++;
             }
         }
 
-        internal void drawSprite(string[] sprite, int topStart)
+        internal void drawCenteredOffsetSprite(string[] sprite, int offsetX, int offsetY)
         {
-            int leftStartPoint = Console.WindowWidth / 2 - sprite[0].Length / 2;
+            int leftStartPoint = Console.WindowWidth / 2 - sprite[0].Length / 2 + 1 + offsetX;
+            int topStartPoint = Console.WindowHeight / 2 - sprite.Length / 2 + offsetY;
+
+            int row = 0;
+            for (int i = topStartPoint; i < topStartPoint + sprite.Length; i++)
+            {
+                int col = 0;
+                for (int j = leftStartPoint; j < leftStartPoint + sprite[row].Length; j++)
+                {
+                    if (i > getBorder(Side.Top) && i < getBorder(Side.Bottom)
+                        && j > getBorder(Side.Left) && j < getBorder(Side.Right))
+                    {
+                        Console.SetCursorPosition(j, i);
+                        Console.Write(sprite[row][col]);
+                    }
+                    col++;
+                }
+                row++;
+            }
+        }
+
+        internal void drawMenuSprite(string[] sprite, List<MenuItem> menuItems, int offsetX, int offsetY)
+        {
+            int leftStartPoint;
+            int topStartPoint = Console.WindowHeight / 2 - sprite.Length / 2 + offsetY;
+
+            int row = 0;
+            for (int i = topStartPoint; i < topStartPoint + sprite.Length; i++)
+            {
+                int col = 0;
+                leftStartPoint = Console.WindowWidth / 2 - sprite[row].Length / 2 + 1 + offsetX;
+
+                if (!menuItems[row].IsActive())
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkGray;
+                }
+                else
+                {
+                    Console.ForegroundColor = ConsoleColor.White;
+                }
+
+                for (int j = leftStartPoint; j < leftStartPoint + sprite[row].Length; j++)
+                {
+                    if (i > getBorder(Side.Top) && i < getBorder(Side.Bottom)
+                        && j > getBorder(Side.Left) && j < getBorder(Side.Right))
+                    {
+                        Console.SetCursorPosition(j, i);
+                        Console.Write(sprite[row][col]);
+                    }
+                    col++;
+                }
+                row++;
+            }
+        }
+
+        internal void drawCenteredTopSprite(string[] sprite, int topStart)
+        {
+            int leftStartPoint = Console.WindowWidth / 2 - sprite[0].Length / 2 + 1;
             int topStartPoint = getBorder(Side.Top) + topStart;
 
             int row = 0;
             for (int i = topStartPoint; i < topStartPoint + sprite.Length; i++)
             {
-                Console.SetCursorPosition(leftStartPoint, i);
-                Console.Write(sprite[row++]);
+                int col = 0;
+                for (int j = leftStartPoint; j < leftStartPoint + sprite[row].Length; j++)
+                {
+                    if (i >= getBorder(Side.Top) && i < getBorder(Side.Bottom)
+                        && j > getBorder(Side.Left) && j < getBorder(Side.Right))
+                    {
+                        Console.SetCursorPosition(j, i);
+                        Console.Write(sprite[row][col]);
+                    }
+                    col++;
+                }
+                row++;
+            }
+        }
+
+        internal void drawCenteredTopSprite(string[] sprite, int topStart, string voidchar)
+        {
+            int leftStartPoint = Console.WindowWidth / 2 - sprite[0].Length / 2 + 1;
+            int topStartPoint = getBorder(Side.Top) + topStart;
+
+            int row = 0;
+            for (int i = topStartPoint; i < topStartPoint + sprite.Length; i++)
+            {
+                int col = 0;
+                for (int j = leftStartPoint; j < leftStartPoint + sprite[row].Length; j++)
+                {
+                    if (i > getBorder(Side.Top) && i < getBorder(Side.Bottom)
+                        && j > getBorder(Side.Left) && j < getBorder(Side.Right))
+                    {
+                        if (sprite[row][col] != voidchar[0])
+                        {
+                            Console.SetCursorPosition(j, i);
+                            Console.Write(sprite[row][col]);
+                        }
+                    }
+                    col++;
+                }
+                row++;
             }
         }
 
@@ -349,21 +473,29 @@ namespace SpaceAvenger
     class StartScene : Scene
     {
         string[] spriteAuthor = {
-            ".         _                _                        .",
-            ".        | | __ ___   ___ | |_  __ _  _ __          .",
-            ".        | |/ // _ \\ / __|| __|/ _` || '__|         .",
-            ".        |   <| (_) |\\__ \\| |_| (_| || |            .",
-            ".        |_|\\_\\\\___/ |___/ \\__|\\__,_||_|            .",
-            ".                                                   .",
+            ".                                                     .",
+            ".                                                     .",
+            ".                                                     .",
+            ".          __                __                       .",
+            ".         |  |--.-----.-----|  |_.---.-.----.         .",
+            ".         |    <|  _  |__ --|   _|  _  |   _|         .",
+            ".         |__|__|_____|_____|____|___._|__|           .",
+            ".                                                     .",
+            ".                                                     .",
+            ".                                                     .",
         };
 
         string[] spriteTitle = {
-            ".                                                   .",
-            ".   __                                              .",
-            ".  ((_  ._   _.  _  _   /\\\\      _  ._   _   _  ._  .",
-            ".  __)) |_) (_| (_ (/_ /--\\\\ \\/ (/_ | | (_| (/_ |   .",
-            ".       |                                _|         .",
-            ".                                                   .",
+            ".                                                     .",
+            ".         _____                 _____     _ _         .",
+            ".        |   __|___ ___ ___ ___|_   _|___|_| |        .",
+            ".        |__   | . | .'|  _| -_| | | | .'| | |        .",
+            ".        |_____|  _|__,|___|___| |_| |__,|_|_|        .",
+            ".              |_|           _                        .",
+            ".       _// _    __/  _     (_      _                 .",
+            ".       //)(-  _) /()/ (/ ()/  ()/)(-  /)()/)(/       .",
+            ".                      /              /      /        .",
+            ".                                                     .",
         };
 
         public StartScene(Interface gameInterface)
@@ -375,12 +507,12 @@ namespace SpaceAvenger
         {
             drawTransition(":", "#", 10);
             //fillScreen("*");
-            drawSprite(spriteAuthor);
+            drawCenteredSprite(spriteAuthor);
 
             Thread.Sleep(2000);
 
             fillScreen(".", " ", true);
-            drawSprite(spriteTitle);
+            drawCenteredSprite(spriteTitle);
 
             Thread.Sleep(3000);
 
@@ -412,10 +544,17 @@ namespace SpaceAvenger
     {
         string blank16 = "                ";
         string[] spriteMenuTitle = {
-            "   __                                              ",
-            "  ((_  ._   _.  _  _   /\\\\      _  ._   _   _  ._  ",
-            "  __)) |_) (_| (_ (/_ /--\\\\ \\/ (/_ | | (_| (/_ |   ",
-            "       |                                _|         ",
+            " _____                 _____     _ _ ",
+            "|   __|___ ___ ___ ___|_   _|___|_| |",
+            "|__   | . | .'|  _| -_| | | | .'| | |",
+            "|_____|  _|__,|___|___| |_| |__,|_|_|",
+            "      |_|                            ",
+        };
+        string[] spriteMenuSubTitle = {
+            "                     _                 ",
+            "_// _    __/  _     (_      _          ",
+            "//)(-  _) /()/ (/ ()/  ()/)(-  /)()/)(/",
+            "               /              /      / ",
         };
 
         List<MenuItem> menuItems = new List<MenuItem>();
@@ -425,9 +564,19 @@ namespace SpaceAvenger
             setSceneBorders(gameInterface.getBorders());
         }
 
-        public void addItem(MenuItem item)
+        public void addMenuItem(MenuItem item)
         {
             menuItems.Add(item);
+        }
+
+        public void addVoidMenuItem()
+        {
+            menuItems.Add(new MenuItem());
+        }
+
+        internal void addTextItem(string text)
+        {
+            menuItems.Add(new MenuItem(text));
         }
 
         public List<MenuItem> GetMenuItems() => menuItems;
@@ -435,28 +584,28 @@ namespace SpaceAvenger
         public void Show()
         {
             fillScreen(" ");
-            drawSprite(generateMenuList());
-            drawSprite(spriteMenuTitle, 0);
+            drawMenu();
+            drawCenteredTopSprite(spriteMenuTitle, 0);
+            drawCenteredTopSprite(spriteMenuSubTitle, 4, " ");
             drawText(Program.version, getBorder(Side.Bottom), getBorder(Side.Right) - Program.version.Length, false);
             drawText($" by {Program.author}", getBorder(Side.Bottom), getBorder(Side.Left), false);
 
             updateMenuList();
         }
 
+        private void drawMenu()
+        {
+            drawMenuSprite(generateMenuList(), menuItems, 0, 4);
+        }
+
         private void updateMenuList()
         {
+            int selectedItem = -1;
+
             while (true)
             {
                 ConsoleKey key = Console.ReadKey(true).Key;
-
-                int selectedItem = -1;
-
-                if (key == ConsoleKey.Enter
-                    || key == ConsoleKey.Z)
-                {
-                    break;
-                }
-
+                
                 foreach (MenuItem item in menuItems)
                 {
                     if (item.IsSelected())
@@ -465,33 +614,49 @@ namespace SpaceAvenger
                     }
                 }
 
+                if (key == ConsoleKey.Enter
+                    || key == ConsoleKey.Z)
+                {
+                    break;
+                }
+
                 if (key == ConsoleKey.DownArrow)
                 {
                     menuItems[selectedItem].SetSelected(false);
-                    selectedItem++;
-                    if (selectedItem == menuItems.Count)
+
+                    do
                     {
-                        selectedItem = 0;
-                    }
+                        selectedItem++;
+                        if (selectedItem >= menuItems.Count)
+                        {
+                            selectedItem = 0;
+                        }
+                    } while (menuItems[selectedItem].IsSkipable() || !menuItems[selectedItem].IsActive());
+                    
                     menuItems[selectedItem].SetSelected(true);
                 }
                 else
                 if (key == ConsoleKey.UpArrow)
                 {
                     menuItems[selectedItem].SetSelected(false);
-                    if (selectedItem == 0)
+                    do
                     {
-                        selectedItem = menuItems.Count - 1;
-                    }
-                    else
-                    {
-                        selectedItem--;
-                    }
+                        if (selectedItem <= 0)
+                        {
+                            selectedItem = menuItems.Count - 1;
+                        }
+                        else
+                        {
+                            selectedItem--;
+                        }
+                    } while (menuItems[selectedItem].IsSkipable() || !menuItems[selectedItem].IsActive());
                     menuItems[selectedItem].SetSelected(true);
                 }
 
-                drawSprite(generateMenuList());
+                drawMenu();
             }
+
+            menuItems[selectedItem].OpenLink();
         }
 
         private string[] generateMenuList()
@@ -505,9 +670,13 @@ namespace SpaceAvenger
 
             foreach (MenuItem item in menuItems)
             {
-                if (item.GetMenuItemText().Length > maxMenuItemTextLength)
+                if (!item.IsSkipable())
                 {
-                    maxMenuItemTextLength = item.GetMenuItemText().Length;
+
+                    if (item.GetMenuItemText().Length > maxMenuItemTextLength)
+                    {
+                        maxMenuItemTextLength = item.GetMenuItemText().Length;
+                    }
                 }
             }
 
@@ -536,30 +705,60 @@ namespace SpaceAvenger
 
                 menuItemFinal = menuItemSideChar + menuItemOffset + menuItemText + menuItemOffset + menuItemSideChar;
 
+                if (item.IsSkipable())
+                {
+                    menuItemFinal = menuItemText;
+                }
+
                 menuList.Add(menuItemFinal);
             }
 
             return menuList.ToArray();
         }
+
+        
     }
 
     class MenuItem
     {
         string itemText;
-        Scene itemLink;
-        bool isSelected;
+        MenuScene itemLink;
 
-        public MenuItem(string itemText, Scene itemLink)
+        bool isSelected = false;
+        bool isSkipable = false;
+        bool isActive = true;
+
+        public MenuItem()
+        {
+            itemText = "";
+            isSkipable = true;
+        }
+
+        public MenuItem(string text)
+        {
+            itemText = text;
+            isSkipable = true;
+        }
+
+        public MenuItem(string itemText, MenuScene itemLink)
         {
             this.itemText = itemText;
             this.itemLink = itemLink;
         }
 
-        public MenuItem(string itemText, Scene itemLink, bool selected)
+        public MenuItem(string itemText, MenuScene itemLink, bool selected)
         {
             this.itemText = itemText;
             this.itemLink = itemLink;
             isSelected = selected;
+        }
+
+        public MenuItem(string itemText, MenuScene itemLink, bool selected, bool active)
+        {
+            this.itemText = itemText;
+            this.itemLink = itemLink;
+            isSelected = selected;
+            isActive = active;
         }
 
         public string GetMenuItemText() => itemText;
@@ -569,9 +768,36 @@ namespace SpaceAvenger
             return isSelected;
         }
 
+        public bool IsSkipable()
+        {
+            return isSkipable;
+        }
+
+        public bool IsActive()
+        {
+            return isActive;
+        }
+
         public void SetSelected(bool state)
         {
             isSelected = state;
+        }
+
+        public void SetActive(bool state)
+        {
+            isActive = state;
+        }
+
+        internal void OpenLink()
+        {
+            if (itemLink == null)
+            {
+                return;
+            }
+            else
+            {
+                itemLink.Show();
+            }
         }
     }
 
