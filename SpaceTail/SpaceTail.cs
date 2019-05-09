@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Media;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
@@ -32,6 +33,9 @@ namespace SpaceTail
         private static int consoleWidth = 80;
         private static int consoleHeight = 25;
         public static string author = "kostar";
+
+        public static string workDir = @"C:\Users\kostar\source\repos\SpaceTail\SpaceTail\";
+        public static string audioDir = @"Resources\Audio\";
 
         static void Main(string[] args)
         {
@@ -93,7 +97,7 @@ namespace SpaceTail
             Interface gameInterface = new Interface();
             sceneManager = new SceneManager(gameInterface);
             //sceneManager.LoadScene("StartScene");
-            sceneManager.PlayStartScene();
+            sceneManager.PlayStartScene(); 
             sceneManager.PlayMenuScene();
         }
     }
@@ -211,6 +215,7 @@ namespace SpaceTail
         StartScene startScene;
         MenuScene mainMenu;
         MenuScene gameMenu;
+        MenuScene loadMenu;
         MenuScene scoreMenu;
         MenuScene optionsMenu;
         MenuScene aboutMenu;
@@ -224,17 +229,39 @@ namespace SpaceTail
             startScene = new StartScene(gameInterface);
 
             mainMenu = new MenuScene(gameInterface);
+            gameMenu = new MenuScene(gameInterface);
+            loadMenu = new MenuScene(gameInterface);
+            scoreMenu = new MenuScene(gameInterface);
+            optionsMenu = new MenuScene(gameInterface);
             aboutMenu = new MenuScene(gameInterface);
             exitMenu = new MenuScene(gameInterface);
 
-            mainMenu.addMenuItem(new MenuItem("Начать Игру", gameMenu, true));
-            mainMenu.addMenuItem(new MenuItem("Загрузить", gameMenu, false, false));
+            MenuItem menuItem;
+
+            mainMenu.addMenuItem(new MenuItem("Начать Игру", gameMenu));
+            mainMenu.setMenuItemAttributes(true, true, true);
+            mainMenu.addMenuItem(new MenuItem("Загрузить", loadMenu));
+            mainMenu.setMenuItemAttributes(false, false);
             mainMenu.addVoidMenuItem();
             mainMenu.addMenuItem(new MenuItem("Рекорды", scoreMenu));
+            mainMenu.setMenuItemAttributes(false, true, true);
             mainMenu.addMenuItem(new MenuItem("Настройки", optionsMenu));
+            mainMenu.setMenuItemAttributes(false, true, true);
             mainMenu.addMenuItem(new MenuItem("Об Игре", aboutMenu));
             mainMenu.addVoidMenuItem();
             mainMenu.addMenuItem(new MenuItem("Выход", exitMenu));
+
+            gameMenu.addMenuItem(new MenuItem("Назад", mainMenu));
+            gameMenu.setMenuItemAttributes(true);
+
+            loadMenu.addMenuItem(new MenuItem("Назад", mainMenu));
+            loadMenu.setMenuItemAttributes(true);
+
+            scoreMenu.addMenuItem(new MenuItem("Назад", mainMenu));
+            scoreMenu.setMenuItemAttributes(true);
+
+            optionsMenu.addMenuItem(new MenuItem("Назад", mainMenu));
+            optionsMenu.setMenuItemAttributes(true);
 
             aboutMenu.addTextItem($"{Program.title} {Program.version}");
             aboutMenu.addVoidMenuItem();
@@ -243,12 +270,14 @@ namespace SpaceTail
             aboutMenu.addTextItem("Помогите же отважной Лаки Стар");
             aboutMenu.addTextItem("вернуться домой!");
             aboutMenu.addVoidMenuItem();
-            aboutMenu.addMenuItem(new MenuItem("Назад", mainMenu, true));
+            aboutMenu.addMenuItem(new MenuItem("Назад", mainMenu));
+            aboutMenu.setMenuItemAttributes(true);
 
             exitMenu.addTextItem("Выйти?");
             exitMenu.addVoidMenuItem();
-            exitMenu.addMenuItem(new MenuItem("Нет", mainMenu, true));
             exitMenu.addMenuItem(new MenuItem("Да", null));
+            exitMenu.setMenuItemAttributes(true, true);
+            exitMenu.addMenuItem(new MenuItem("Нет", mainMenu));
         }
 
         public void LoadScene(string sceneName)
@@ -354,6 +383,10 @@ namespace SpaceTail
                 if (!menuItems[row].IsActive())
                 {
                     Console.ForegroundColor = ConsoleColor.DarkGray;
+                }
+                else if (menuItems[row].IsColored())
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkRed;
                 }
                 else
                 {
@@ -564,6 +597,39 @@ namespace SpaceTail
             setSceneBorders(gameInterface.getBorders());
         }
 
+        public void setMenuItemAttributes(bool isSelected)
+        {
+            MenuItem item = menuItems.Last<MenuItem>();
+            menuItems.Remove(item);
+
+            item.SetSelected(isSelected);
+
+            menuItems.Add(item);
+        }
+
+        public void setMenuItemAttributes(bool isSelected, bool isActive)
+        {
+            MenuItem item = menuItems.Last<MenuItem>();
+            menuItems.Remove(item);
+
+            item.SetSelected(isSelected);
+            item.SetActive(isActive);
+
+            menuItems.Add(item);
+        }
+
+        public void setMenuItemAttributes(bool isSelected, bool isActive, bool isColored)
+        {
+            MenuItem item = menuItems.Last<MenuItem>();
+            menuItems.Remove(item);
+
+            item.SetSelected(isSelected);
+            item.SetActive(isActive);
+            item.SetColored(isColored);
+
+            menuItems.Add(item);
+        }
+
         public void addMenuItem(MenuItem item)
         {
             menuItems.Add(item);
@@ -600,7 +666,7 @@ namespace SpaceTail
 
         private void updateMenuList()
         {
-            int selectedItem = -1;
+            int selectedItem = 0;
 
             while (true)
             {
@@ -617,6 +683,15 @@ namespace SpaceTail
                 if (key == ConsoleKey.Enter
                     || key == ConsoleKey.Z)
                 {
+                    AudioManager.PlaySound("MenuPress");
+                    break;
+                }
+
+                if (key == ConsoleKey.Escape
+                    || key == ConsoleKey.X)
+                {
+                    selectedItem = menuItems.IndexOf(menuItems.Last<MenuItem>());
+                    AudioManager.PlaySound("MenuPress");
                     break;
                 }
 
@@ -634,8 +709,9 @@ namespace SpaceTail
                     } while (menuItems[selectedItem].IsSkipable() || !menuItems[selectedItem].IsActive());
                     
                     menuItems[selectedItem].SetSelected(true);
+                    AudioManager.PlaySound("MenuNav");
                 }
-                else
+
                 if (key == ConsoleKey.UpArrow)
                 {
                     menuItems[selectedItem].SetSelected(false);
@@ -650,7 +726,10 @@ namespace SpaceTail
                             selectedItem--;
                         }
                     } while (menuItems[selectedItem].IsSkipable() || !menuItems[selectedItem].IsActive());
+
                     menuItems[selectedItem].SetSelected(true);
+                    AudioManager.PlaySound("MenuNav");
+
                 }
 
                 drawMenu();
@@ -728,6 +807,8 @@ namespace SpaceTail
         bool isSkipable = false;
         bool isActive = true;
 
+        bool isColored = false;
+
         public MenuItem()
         {
             itemText = "";
@@ -778,6 +859,11 @@ namespace SpaceTail
             return isActive;
         }
 
+        internal bool IsColored()
+        {
+            return isColored;
+        }
+
         public void SetSelected(bool state)
         {
             isSelected = state;
@@ -786,6 +872,11 @@ namespace SpaceTail
         public void SetActive(bool state)
         {
             isActive = state;
+        }
+
+        internal void SetColored(bool state)
+        {
+            isColored = state;
         }
 
         internal void OpenLink()
@@ -799,10 +890,24 @@ namespace SpaceTail
                 itemLink.Show();
             }
         }
+
+        
     }
 
     class GameScene : Scene
     {
 
+    }
+
+    class AudioManager
+    {
+        public static void PlaySound(string fileName)
+        {
+            string file = $@"{Program.workDir}{Program.audioDir}{fileName}.wav";
+            //string file = $@"{fileName}.wav";
+            SoundPlayer sound = new SoundPlayer(file);
+            sound.Play();
+            sound.Dispose();
+        }
     }
 }
