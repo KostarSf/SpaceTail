@@ -72,29 +72,11 @@
     <Compile Include="Source\Scenes\Menu\Items\MenuItem.cs" />
     <Compile Include="Source\Scenes\Menu\Items\MenuOptionItem.cs" />
     <Compile Include="Source\Scenes\Menu\MenuScene.cs" />
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <DependentUpon>Settings.settings</DependentUpon>
-    </Compile>
     <Compile Include="Source\Scenes\Scene.cs" />
     <Compile Include="Source\Scenes\SceneManager.cs" />
-    <Compile Include="Settings.cs" />
     <Compile Include="Source\SpaceTail.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Source\Scenes\Special\StartScene.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.6.1">
@@ -110,16 +92,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="icon.ico" />
-    <None Include="Resources\Audio\MenuState.wav" />
-    <None Include="Resources\Audio\MenuPress.wav" />
-    <None Include="Resources\Audio\MenuNav.wav" />
+    <None Include="Resources\Audio\MenuState1.wav" />
+    <None Include="Resources\Audio\MenuPress1.wav" />
+    <None Include="Resources\Audio\MenuNav1.wav" />
   </ItemGroup>
   <ItemGroup />
-  <ItemGroup>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

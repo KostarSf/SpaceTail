@@ -324,5 +324,47 @@ namespace SpaceTail
                 Thread.Sleep(speed);
             }
         }
+
+
+        static bool changeColor;
+
+        public static void ShowAlert(string text)
+        {
+            string output = "";
+
+            for (int i = 0; i < GameBorder.Right; i++)
+            {
+                if (i < text.Length)
+                {
+                    output += text[i];
+                }
+                else
+                {
+                    output += " ";
+                }
+            }
+
+            if (!changeColor)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                changeColor = !changeColor;
+            }
+            else
+            {
+                Console.ForegroundColor = ConsoleColor.DarkRed;
+                changeColor = !changeColor;
+            }
+            
+            Console.SetCursorPosition(GameBorder.Left, 0);
+            Console.Write(output);
+
+            Console.ForegroundColor = ConsoleColor.White;
+
+        }
+
+        public static void ClearAlert()
+        {
+            ShowAlert("");
+        }
     }
 }

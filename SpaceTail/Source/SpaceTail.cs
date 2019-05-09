@@ -45,7 +45,7 @@ namespace SpaceTail
             {
                 DeleteMenu(sysMenu, SC_MINIMIZE, MF_BYCOMMAND);
                 DeleteMenu(sysMenu, SC_MAXIMIZE, MF_BYCOMMAND);
-                DeleteMenu(sysMenu, SC_SIZE, MF_BYCOMMAND);
+                //DeleteMenu(sysMenu, SC_SIZE, MF_BYCOMMAND);
             }
         }
 
@@ -65,26 +65,6 @@ namespace SpaceTail
             Console.WriteLine(text);
             Console.SetCursorPosition(text.Length, 1);
             Console.ReadKey(true);
-        }
-
-        public static void ShowText(string text)
-        {
-            string output = "";
-
-            for (int i = 0; i < Console.BufferWidth; i++)
-            {
-                if (i <= text.Length)
-                {
-                    output += text[i];
-                }
-                else
-                {
-                    output += " ";
-                }
-            }
-
-            Console.SetCursorPosition(0, 0);
-            Console.Write(output);
         }
     }
 }
