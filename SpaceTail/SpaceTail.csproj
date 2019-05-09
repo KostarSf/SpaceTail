@@ -113,9 +113,7 @@
     <None Include="Resources\Audio\MenuPress.wav" />
     <None Include="Resources\Audio\MenuNav.wav" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="test\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
