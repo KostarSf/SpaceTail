@@ -10,8 +10,7 @@
 
         public Game()
         {
-            Interface gameInterface = new Interface();
-            sceneManager = new SceneManager(gameInterface);
+            sceneManager = new SceneManager();
             //sceneManager.LoadScene("StartScene");
             sceneManager.PlayStartScene(); 
             sceneManager.PlayMenuScene();

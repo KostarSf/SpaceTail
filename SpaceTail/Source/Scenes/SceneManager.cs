@@ -16,19 +16,17 @@ namespace SpaceTail
 
         ArrayList Scenes = new ArrayList();
 
-        public SceneManager(Interface gameInterface)
+        public SceneManager()
         {
-            startScene = new StartScene(gameInterface);
+            startScene = new StartScene();
 
-            mainMenu = new MenuScene(gameInterface);
-            gameMenu = new MenuScene(gameInterface);
-            loadMenu = new MenuScene(gameInterface);
-            scoreMenu = new MenuScene(gameInterface);
-            optionsMenu = new MenuScene(gameInterface);
-            aboutMenu = new MenuScene(gameInterface);
-            exitMenu = new MenuScene(gameInterface);
-
-            MenuItem menuItem;
+            mainMenu = new MenuScene();
+            gameMenu = new MenuScene();
+            loadMenu = new MenuScene();
+            scoreMenu = new MenuScene();
+            optionsMenu = new MenuScene();
+            aboutMenu = new MenuScene();
+            exitMenu = new MenuScene();
 
             mainMenu.addMenuItem(new MenuItem("Начать Игру", gameMenu));
             mainMenu.setMenuItemAttributes(true, true, true);
@@ -43,32 +41,26 @@ namespace SpaceTail
             mainMenu.addVoidMenuItem();
             mainMenu.addMenuItem(new MenuItem("Выход", exitMenu));
 
-            gameMenu.addMenuItem(new MenuItem("Назад", mainMenu));
-            gameMenu.setMenuItemAttributes(true);
+            gameMenu.addMenuItem(new MenuItem("Назад", mainMenu, true));
 
-            loadMenu.addMenuItem(new MenuItem("Назад", mainMenu));
-            loadMenu.setMenuItemAttributes(true);
+            loadMenu.addMenuItem(new MenuItem("Назад", mainMenu, true));
 
-            scoreMenu.addMenuItem(new MenuItem("Назад", mainMenu));
-            scoreMenu.setMenuItemAttributes(true);
+            scoreMenu.addMenuItem(new MenuItem("Назад", mainMenu, true));
 
-            optionsMenu.addMenuItem(new MenuItem("Назад", mainMenu));
-            optionsMenu.setMenuItemAttributes(true);
+            optionsMenu.addMenuItem(new MenuItem("Назад", mainMenu, true));
 
-            aboutMenu.addTextItem($"{Program.title} {Program.version}");
+            aboutMenu.addTextItem($"{Config.Title} {Config.Version}");
             aboutMenu.addVoidMenuItem();
             aboutMenu.addTextItem("Эта история повествует об одной");
             aboutMenu.addTextItem("поняшке, затерявшейся в космосе.");
             aboutMenu.addTextItem("Помогите же отважной Лаки Стар");
             aboutMenu.addTextItem("вернуться домой!");
             aboutMenu.addVoidMenuItem();
-            aboutMenu.addMenuItem(new MenuItem("Назад", mainMenu));
-            aboutMenu.setMenuItemAttributes(true);
+            aboutMenu.addMenuItem(new MenuItem("Назад", mainMenu, true));
 
             exitMenu.addTextItem("Выйти?");
             exitMenu.addVoidMenuItem();
-            exitMenu.addMenuItem(new MenuItem("Да", null));
-            exitMenu.setMenuItemAttributes(true, true);
+            exitMenu.addMenuItem(new MenuItem("Да", null, true));
             exitMenu.addMenuItem(new MenuItem("Нет", mainMenu));
         }
 

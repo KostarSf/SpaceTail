@@ -36,14 +36,6 @@
             isSelected = selected;
         }
 
-        public MenuItem(string itemText, MenuScene itemLink, bool selected, bool active)
-        {
-            this.itemText = itemText;
-            this.itemLink = itemLink;
-            isSelected = selected;
-            isActive = active;
-        }
-
         public string GetMenuItemText() => itemText;
 
         public bool IsSelected()

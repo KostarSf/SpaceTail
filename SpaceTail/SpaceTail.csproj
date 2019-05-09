@@ -65,6 +65,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Source\Audio\AudioManager.cs" />
+    <Compile Include="Source\Main\Config.cs" />
     <Compile Include="Source\Main\Game.cs" />
     <Compile Include="Source\Scenes\Game\GameScene.cs" />
     <Compile Include="Source\Main\Interface.cs" />
@@ -81,7 +82,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
     <Compile Include="Source\Scenes\Scene.cs" />
-    <Compile Include="Source\Scenes\Manager\SceneManager.cs" />
+    <Compile Include="Source\Scenes\SceneManager.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Source\SpaceTail.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

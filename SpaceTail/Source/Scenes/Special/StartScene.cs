@@ -31,45 +31,23 @@ namespace SpaceTail
             ".                                                     .",
         };
 
-        public StartScene(Interface gameInterface)
+        public StartScene()
         {
-            setSceneBorders(gameInterface.getBorders());
+            
         }
 
         public void start()
         {
-            drawTransition(":", "#", 10);
-            //fillScreen("*");
-            drawCenteredSprite(spriteAuthor);
+            Interface.DrawTransition(":", "#", 10);
 
+            Interface.DrawCenteredSprite(spriteAuthor);
             Thread.Sleep(2000);
 
-            fillScreen(".", " ", true);
-            drawCenteredSprite(spriteTitle);
-
+            Interface.FillPatternScreen(".", " ", true);
+            Interface.DrawCenteredSprite(spriteTitle);
             Thread.Sleep(3000);
 
-            drawTransition(" ", "#", 20);
+            Interface.DrawTransition(" ", "#", 20);
         }
-
-        private void drawTransition(string bg, string edge, int speed)
-        {
-            for (int i = getBorder(Side.Left); i <= getBorder(Side.Right); i++)
-            {
-                for (int j = getBorder(Side.Top); j <= getBorder(Side.Bottom); j++)
-                {
-                    Console.SetCursorPosition(i, j);
-
-                    if (i == getBorder(Side.Right))
-                        Console.Write($"{bg}");
-                    else
-                        Console.Write($"{bg}{edge}");
-                }
-
-                Thread.Sleep(speed);
-            }
-        }
-
-        
     }
 }

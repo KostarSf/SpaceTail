@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace SpaceTail
 {
@@ -23,9 +24,9 @@ namespace SpaceTail
 
         List<MenuItem> menuItems = new List<MenuItem>();
 
-        public MenuScene(Interface gameInterface)
+        public MenuScene()
         {
-            setSceneBorders(gameInterface.getBorders());
+            
         }
 
         public void setMenuItemAttributes(bool isSelected)
@@ -80,19 +81,19 @@ namespace SpaceTail
 
         public void Show()
         {
-            fillScreen(" ");
+            Interface.FillScene(" ");
             drawMenu();
-            drawCenteredTopSprite(spriteMenuTitle, 0);
-            drawCenteredTopSprite(spriteMenuSubTitle, 4, " ");
-            drawText(Program.version, getBorder(Side.Bottom), getBorder(Side.Right) - Program.version.Length, false);
-            drawText($" by {Program.author}", getBorder(Side.Bottom), getBorder(Side.Left), false);
+            Interface.DrawCenteredTopSprite(spriteMenuTitle, 0);
+            Interface.DrawCenteredTopSprite(spriteMenuSubTitle, 4, " ");
+            Interface.DrawText(Config.Version, 0, 0, true);
+            Interface.DrawText($" by {Config.Author}", 0, 0, false, true);
 
             updateMenuList();
         }
 
         private void drawMenu()
         {
-            drawMenuSprite(generateMenuList(), menuItems, 0, 4);
+            Interface.DrawMenuSprite(generateMenuList(), menuItems, 0, 4);
         }
 
         private void updateMenuList()
@@ -196,7 +197,7 @@ namespace SpaceTail
                 string menuItemOffset = "";
                 string menuItemSideChar = " ";
 
-                string menuItemFinal;
+                var menuItemFinal = new StringBuilder("NO_VALUE");
 
                 if (menuItemText.Length % 2 == 0)
                 {
@@ -213,14 +214,22 @@ namespace SpaceTail
                     menuItemSideChar = sideChar;
                 }
 
-                menuItemFinal = menuItemSideChar + menuItemOffset + menuItemText + menuItemOffset + menuItemSideChar;
-
                 if (item.IsSkipable())
                 {
-                    menuItemFinal = menuItemText;
+                    menuItemFinal.Clear();
+                    menuItemFinal.Append(menuItemText);
+                }
+                else
+                {
+                    menuItemFinal.Clear();
+                    menuItemFinal.Append(menuItemSideChar);
+                    menuItemFinal.Append(menuItemOffset);
+                    menuItemFinal.Append(menuItemText);
+                    menuItemFinal.Append(menuItemOffset);
+                    menuItemFinal.Append(menuItemSideChar);
                 }
 
-                menuList.Add(menuItemFinal);
+                menuList.Add(menuItemFinal.ToString());
             }
 
             return menuList.ToArray();

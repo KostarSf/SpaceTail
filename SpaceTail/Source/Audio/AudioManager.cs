@@ -6,7 +6,7 @@ namespace SpaceTail
     {
         public static void PlaySound(string fileName)
         {
-            string file = $@"{Program.workDir}{Program.audioDir}{fileName}.wav";
+            string file = $@"{Config.StaticWorkDir}{Config.AudioDir}{fileName}.wav";
             //string file = $@"{fileName}.wav";
             SoundPlayer sound = new SoundPlayer(file);
             sound.Play();

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SpaceTail
 {
-    class Program
+    partial class Program
     {
         private const int MF_BYCOMMAND = 0x00000000;
         public const int SC_CLOSE = 0xF060;
@@ -23,19 +23,12 @@ namespace SpaceTail
         [DllImport("kernel32.dll", ExactSpelling = true)]
         private static extern IntPtr GetConsoleWindow();
 
-        public static string title = "SpaceTail";
-        public static string version = "v1.0";
-        //80 20
-        private static int consoleWidth = 80;
-        private static int consoleHeight = 25;
-        public static string author = "kostar";
-
-        public static string workDir = @"C:\Users\kostar\source\repos\SpaceTail\SpaceTail\";
-        public static string audioDir = @"Resources\Audio\";
-
         static void Main(string[] args)
         {
-            configureWindow(title, consoleWidth, consoleHeight);
+            configureWindow();
+
+            Config.SetupGameWindow();
+            Interface.Initialize();
 
             Game game = new Game();
 
@@ -43,13 +36,8 @@ namespace SpaceTail
             waitInputForQuit();
         }
 
-        private static void configureWindow(string title, int width, int height)
-        {
-            Console.Title = title;
-
-            Console.SetWindowSize(width, height);
-            Console.SetBufferSize(width, height);
-
+        private static void configureWindow()
+        { 
             IntPtr handle = GetConsoleWindow();
             IntPtr sysMenu = GetSystemMenu(handle, false);
 
