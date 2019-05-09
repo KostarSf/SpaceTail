@@ -40,52 +40,60 @@ namespace SpaceTail
             Console.Clear();
             Console.CursorVisible = false;
 
+            //clearScreen();
+
             setGameBorders();
             drawFrameBorders();
             ClearGameField();
         }
 
+        private static void clearScreen()
+        {
+            for (int i = 0; i < Console.BufferWidth; i++)
+            {
+                for (int j = 0; j < Console.BufferHeight; j++)
+                {
+                    Console.SetCursorPosition(i, j);
+                    Console.Write(" ");
+                }
+            }
+        }
+
         static void setGameBorders()
         {
-            GameBorder.setBorders(3, Console.WindowWidth - 2, 2, Console.WindowHeight - 3);
+            GameBorder.setBorders(3, Console.BufferWidth - 4, 2, Console.BufferHeight - 3);
         }
 
         static void drawFrameBorders()
         {
-            for (int i = 2; i < Console.WindowWidth; i++)
+            for (int i = GameBorder.Left - 1; i < GameBorder.Right + 1; i++)
             {
-                Console.SetCursorPosition(i, 2);
+                Console.SetCursorPosition(i, GameBorder.Top - 1);
+                Console.Write("═");
+
+                Console.SetCursorPosition(i, GameBorder.Bottom + 1);
                 Console.Write("═");
             }
 
-            for (int i = 2; i < Console.WindowWidth; i++)
+            for (int i = GameBorder.Top - 1; i < GameBorder.Bottom + 1; i++)
             {
-                Console.SetCursorPosition(i, Console.WindowHeight - 1);
-                Console.Write("═");
-            }
+                Console.SetCursorPosition(GameBorder.Left - 1, i);
+                Console.Write("║");
 
-            for (int i = 2; i < Console.WindowHeight - 1; i++)
-            {
-                Console.SetCursorPosition(2, i);
+                Console.SetCursorPosition(GameBorder.Right + 1, i);
                 Console.Write("║");
             }
 
-            for (int i = 2; i < Console.WindowHeight - 1; i++)
-            {
-                Console.SetCursorPosition(Console.WindowWidth - 1, i);
-                Console.Write("║");
-            }
-
-            Console.SetCursorPosition(2, 1);
+            Console.SetCursorPosition(GameBorder.Left - 1, GameBorder.Top - 1);
             Console.Write("╔");
 
-            Console.SetCursorPosition(Console.WindowWidth - 1, 1);
+            Console.SetCursorPosition(GameBorder.Right + 1, GameBorder.Top - 1);
             Console.Write("╗");
 
-            Console.SetCursorPosition(2, Console.WindowHeight - 2);
+            Console.SetCursorPosition(GameBorder.Left - 1, GameBorder.Bottom + 1);
             Console.Write("╚");
 
-            Console.SetCursorPosition(Console.WindowWidth - 1, Console.WindowHeight - 2);
+            Console.SetCursorPosition(GameBorder.Right + 1, GameBorder.Bottom + 1);
             Console.Write("╝");
         }
 
@@ -103,8 +111,8 @@ namespace SpaceTail
 
         public static void DrawCenteredSprite(string[] sprite)
         {
-            int leftStartPoint = Console.WindowWidth / 2 - sprite[0].Length / 2 + 1;
-            int topStartPoint = Console.WindowHeight / 2 - sprite.Length / 2;
+            int leftStartPoint = Console.BufferWidth / 2 - sprite[0].Length / 2 + 1;
+            int topStartPoint = Console.BufferHeight / 2 - sprite.Length / 2;
 
             int row = 0;
             for (int i = topStartPoint; i < topStartPoint + sprite.Length; i++)
@@ -126,8 +134,8 @@ namespace SpaceTail
 
         public static void DrawCenteredOffsetSprite(string[] sprite, int offsetX, int offsetY)
         {
-            int leftStartPoint = Console.WindowWidth / 2 - sprite[0].Length / 2 + 1 + offsetX;
-            int topStartPoint = Console.WindowHeight / 2 - sprite.Length / 2 + offsetY;
+            int leftStartPoint = Console.BufferWidth / 2 - sprite[0].Length / 2 + 1 + offsetX;
+            int topStartPoint = Console.BufferHeight / 2 - sprite.Length / 2 + offsetY;
 
             int row = 0;
             for (int i = topStartPoint; i < topStartPoint + sprite.Length; i++)
@@ -150,13 +158,13 @@ namespace SpaceTail
         public static void DrawMenuSprite(string[] sprite, List<MenuItem> menuItems, int offsetX, int offsetY)
         {
             int leftStartPoint;
-            int topStartPoint = Console.WindowHeight / 2 - sprite.Length / 2 + offsetY;
+            int topStartPoint = Console.BufferHeight / 2 - sprite.Length / 2 + offsetY;
 
             int row = 0;
             for (int i = topStartPoint; i < topStartPoint + sprite.Length; i++)
             {
                 int col = 0;
-                leftStartPoint = Console.WindowWidth / 2 - sprite[row].Length / 2 + 1 + offsetX;
+                leftStartPoint = Console.BufferWidth / 2 - sprite[row].Length / 2 + 1 + offsetX;
 
                 if (!menuItems[row].IsActive())
                 {
@@ -173,7 +181,7 @@ namespace SpaceTail
 
                 for (int j = leftStartPoint; j < leftStartPoint + sprite[row].Length; j++)
                 {
-                    if (i > GameBorder.Top && i < GameBorder.Bottom
+                    if (i > GameBorder.Top && i <= GameBorder.Bottom
                         && j > GameBorder.Left && j < GameBorder.Right)
                     {
                         Console.SetCursorPosition(j, i);
@@ -187,7 +195,7 @@ namespace SpaceTail
 
         public static void DrawCenteredTopSprite(string[] sprite, int topStart)
         {
-            int leftStartPoint = Console.WindowWidth / 2 - sprite[0].Length / 2 + 1;
+            int leftStartPoint = Console.BufferWidth / 2 - sprite[0].Length / 2 + 1;
             int topStartPoint = GameBorder.Top + topStart;
 
             int row = 0;
@@ -210,7 +218,7 @@ namespace SpaceTail
 
         public static void DrawCenteredTopSprite(string[] sprite, int topStart, string voidchar)
         {
-            int leftStartPoint = Console.WindowWidth / 2 - sprite[0].Length / 2 + 1;
+            int leftStartPoint = Console.BufferWidth / 2 - sprite[0].Length / 2 + 1;
             int topStartPoint = GameBorder.Top + topStart;
 
             int row = 0;

@@ -70,6 +70,7 @@
     <Compile Include="Source\Scenes\Game\GameScene.cs" />
     <Compile Include="Source\Main\Interface.cs" />
     <Compile Include="Source\Scenes\Menu\Items\MenuItem.cs" />
+    <Compile Include="Source\Scenes\Menu\Items\MenuOptionItem.cs" />
     <Compile Include="Source\Scenes\Menu\MenuScene.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>

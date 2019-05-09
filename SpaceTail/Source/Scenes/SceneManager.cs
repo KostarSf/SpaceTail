@@ -36,7 +36,6 @@ namespace SpaceTail
             mainMenu.addMenuItem(new MenuItem("Рекорды", scoreMenu));
             mainMenu.setMenuItemAttributes(false, true, true);
             mainMenu.addMenuItem(new MenuItem("Настройки", optionsMenu));
-            mainMenu.setMenuItemAttributes(false, true, true);
             mainMenu.addMenuItem(new MenuItem("Об Игре", aboutMenu));
             mainMenu.addVoidMenuItem();
             mainMenu.addMenuItem(new MenuItem("Выход", exitMenu));
@@ -47,6 +46,18 @@ namespace SpaceTail
 
             scoreMenu.addMenuItem(new MenuItem("Назад", mainMenu, true));
 
+            optionsMenu.addTextItem("Размеры Окна: ");
+            optionsMenu.addOptionItem("Ширина: ", Config.Option.WindowWidth);
+            optionsMenu.addOptionItem("Высота: ", Config.Option.WindowHeight);
+            optionsMenu.addVoidMenuItem();
+            optionsMenu.addTextItem("Громкость Игры:");
+            optionsMenu.addOptionItem("Общая: ", Config.Option.AudioMaster);
+            optionsMenu.addOptionItem("Звуки: ", Config.Option.AudioSounds);
+            optionsMenu.addOptionItem("Музыка: ", Config.Option.AudioMusic);
+            optionsMenu.addVoidMenuItem();
+            optionsMenu.addOptionItem("Сбросить Рекорды", Config.Option.ResetScores);
+            optionsMenu.addOptionItem("Сбросить Настройки", Config.Option.ResetOptions);
+            optionsMenu.addVoidMenuItem();
             optionsMenu.addMenuItem(new MenuItem("Назад", mainMenu, true));
 
             aboutMenu.addTextItem($"{Config.Title} {Config.Version}");

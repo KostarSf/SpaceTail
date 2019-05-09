@@ -77,6 +77,11 @@ namespace SpaceTail
             menuItems.Add(new MenuItem(text));
         }
 
+        internal void addOptionItem(string text, Config.Option option)
+        {
+            menuItems.Add(new MenuOptionItem(text, option));
+        }
+
         public List<MenuItem> GetMenuItems() => menuItems;
 
         public void Show()
@@ -102,8 +107,10 @@ namespace SpaceTail
 
             while (true)
             {
-                ConsoleKey key = Console.ReadKey(true).Key;
-                
+                ConsoleKeyInfo rawKey = Console.ReadKey(true);
+                ConsoleKey key = rawKey.Key;
+                ConsoleModifiers modifiers = rawKey.Modifiers;
+
                 foreach (MenuItem item in menuItems)
                 {
                     if (item.IsSelected())
@@ -115,8 +122,11 @@ namespace SpaceTail
                 if (key == ConsoleKey.Enter
                     || key == ConsoleKey.Z)
                 {
-                    AudioManager.PlaySound("MenuPress");
-                    break;
+                    if (menuItems[selectedItem].IsClickable())
+                    {
+                        AudioManager.PlaySound("MenuPress");
+                        break;
+                    }
                 }
 
                 if (key == ConsoleKey.Escape
@@ -127,7 +137,8 @@ namespace SpaceTail
                     break;
                 }
 
-                if (key == ConsoleKey.DownArrow)
+                if (key == ConsoleKey.DownArrow
+                    || key == ConsoleKey.S)
                 {
                     menuItems[selectedItem].SetSelected(false);
 
@@ -144,7 +155,8 @@ namespace SpaceTail
                     AudioManager.PlaySound("MenuNav");
                 }
 
-                if (key == ConsoleKey.UpArrow)
+                if (key == ConsoleKey.UpArrow
+                    || key == ConsoleKey.W)
                 {
                     menuItems[selectedItem].SetSelected(false);
                     do
@@ -164,6 +176,34 @@ namespace SpaceTail
 
                 }
 
+                if (key == ConsoleKey.LeftArrow
+                    || key == ConsoleKey.A)
+                {
+                    if (menuItems[selectedItem].GetItemType() == "OptionItem")
+                    {
+                        MenuOptionItem optionItem = (MenuOptionItem)menuItems[selectedItem];
+                        if (modifiers == ConsoleModifiers.Control)
+                            optionItem.ChangeOptionValue(-5);
+                        else
+                            optionItem.ChangeOptionValue(-1);
+                        AudioManager.PlaySound("MenuState");
+                    }
+                }
+
+                if (key == ConsoleKey.RightArrow
+                    || key == ConsoleKey.D)
+                {
+                    if (menuItems[selectedItem].GetItemType() == "OptionItem")
+                    {
+                        MenuOptionItem optionItem = (MenuOptionItem)menuItems[selectedItem];
+                        if (modifiers == ConsoleModifiers.Control)
+                            optionItem.ChangeOptionValue(5);
+                        else
+                            optionItem.ChangeOptionValue(1);
+                        AudioManager.PlaySound("MenuState");
+                    }
+                }
+
                 drawMenu();
             }
 
@@ -174,6 +214,7 @@ namespace SpaceTail
         {
             int sideOffset = 8;
             string sideChar = "*";
+            string[] optionSideChar = { "<", ">" };
 
             List<string> menuList = new List<string>();
 
@@ -184,18 +225,18 @@ namespace SpaceTail
                 if (!item.IsSkipable())
                 {
 
-                    if (item.GetMenuItemText().Length > maxMenuItemTextLength)
+                    if (item.GetItemText().Length > maxMenuItemTextLength)
                     {
-                        maxMenuItemTextLength = item.GetMenuItemText().Length;
+                        maxMenuItemTextLength = item.GetItemText().Length;
                     }
                 }
             }
 
             foreach (MenuItem item in menuItems)
             {
-                string menuItemText = item.GetMenuItemText();
+                string menuItemText = item.GetItemText();
                 string menuItemOffset = "";
-                string menuItemSideChar = " ";
+                string[] menuItemSideChar = { " ", " " };
 
                 var menuItemFinal = new StringBuilder("NO_VALUE");
 
@@ -211,7 +252,18 @@ namespace SpaceTail
 
                 if (item.IsSelected())
                 {
-                    menuItemSideChar = sideChar;
+                    if (item.GetItemType() == "MenuItem"
+                        || item.GetItemType() == "OptionButtonItem")
+                    {
+                        menuItemSideChar[0] = sideChar;
+                        menuItemSideChar[1] = sideChar;
+                    }
+
+                    if (item.GetItemType() == "OptionItem")
+                    {
+                        menuItemSideChar[0] = optionSideChar[0];
+                        menuItemSideChar[1] = optionSideChar[1];
+                    }
                 }
 
                 if (item.IsSkipable())
@@ -222,11 +274,11 @@ namespace SpaceTail
                 else
                 {
                     menuItemFinal.Clear();
-                    menuItemFinal.Append(menuItemSideChar);
+                    menuItemFinal.Append(menuItemSideChar[0]);
                     menuItemFinal.Append(menuItemOffset);
                     menuItemFinal.Append(menuItemText);
                     menuItemFinal.Append(menuItemOffset);
-                    menuItemFinal.Append(menuItemSideChar);
+                    menuItemFinal.Append(menuItemSideChar[1]);
                 }
 
                 menuList.Add(menuItemFinal.ToString());

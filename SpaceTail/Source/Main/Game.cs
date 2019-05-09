@@ -12,7 +12,7 @@
         {
             sceneManager = new SceneManager();
             //sceneManager.LoadScene("StartScene");
-            sceneManager.PlayStartScene(); 
+            //sceneManager.PlayStartScene(); 
             sceneManager.PlayMenuScene();
         }
     }
