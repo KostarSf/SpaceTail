@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Diagnostics;
 
 namespace SpaceTail
 {
@@ -12,7 +13,7 @@ namespace SpaceTail
         MenuScene optionsMenu;
         MenuScene aboutMenu;
         MenuScene exitMenu;
-        GameScene gameScene;
+        //GameScene gameScene;
 
         ArrayList Scenes = new ArrayList();
 
@@ -87,7 +88,10 @@ namespace SpaceTail
 
         internal void PlayMenuScene()
         {
+            Debug.WriteLine("Sounds: " + AudioManager.SoundList.Count);
+            AudioManager.PlayMusic("WhisperOfStars");
             mainMenu.Show();
+            
         }
     }
 }

@@ -44,6 +44,7 @@ namespace SpaceTail
             Thread.Sleep(2000);
 
             Interface.FillPatternScreen(".", " ", true);
+            AudioManager.PlayMusicOnce("Intro");
             Interface.DrawCenteredSprite(spriteTitle);
             Thread.Sleep(3000);
 

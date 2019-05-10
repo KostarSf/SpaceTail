@@ -8,7 +8,6 @@ namespace SpaceTail
 {
     class MenuScene : Scene
     {
-        string blank16 = "                ";
         string[] spriteMenuTitle = {
             " _____                 _____     _ _ ",
             "|   __|___ ___ ___ ___|_   _|___|_| |",

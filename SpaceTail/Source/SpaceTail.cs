@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace SpaceTail
@@ -45,7 +46,7 @@ namespace SpaceTail
             {
                 DeleteMenu(sysMenu, SC_MINIMIZE, MF_BYCOMMAND);
                 DeleteMenu(sysMenu, SC_MAXIMIZE, MF_BYCOMMAND);
-                //DeleteMenu(sysMenu, SC_SIZE, MF_BYCOMMAND);
+                DeleteMenu(sysMenu, SC_SIZE, MF_BYCOMMAND);
             }
         }
 

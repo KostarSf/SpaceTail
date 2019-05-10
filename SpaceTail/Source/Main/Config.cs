@@ -11,14 +11,15 @@ namespace SpaceTail
 
         //80 20
         public static bool fullscreen = false;
-        public static int WindowWidth = 80;
+        public static int WindowWidth = 90;
         public static int WindowHeight = 25;
         public static int AudioMaster = 10;
         public static int AudioSounds = 10;
         public static int AudioMusic = 10;
 
         public static string StaticWorkDir = @"C:\Users\kostar\source\repos\SpaceTail\SpaceTail\";
-        public static string AudioDir = @"Resources\Audio\";
+        public static string SoundsDir = @"Resources\Audio\Sounds\";
+        public static string MusicDir = @"Resources\Audio\Music\";
 
         public enum Option
         {
