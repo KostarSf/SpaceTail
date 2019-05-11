@@ -17,7 +17,6 @@ namespace SpaceTail.Source.Audio
 
         VorbisWaveReader vorbisStream;
         WaveOutEvent waveOut;
-        Thread musicThread;
 
         public Music(string name, string path)
         {
@@ -28,59 +27,63 @@ namespace SpaceTail.Source.Audio
 
         protected override void InitAudio()
         {
-            vorbisStream = new VorbisWaveReader(Path);
-            waveOut = new WaveOutEvent();
-            waveOut.Init(vorbisStream);
+            using (vorbisStream = new VorbisWaveReader(Path))
+            using (waveOut = new WaveOutEvent())
+            {
+                waveOut.Init(vorbisStream);
+            }
         }
 
-        public override void Loop()
+        public async override void Loop()
         {
             if (!isPlaying)
             {
                 isPlaying = true;
-                musicThread = new Thread(() =>
+
+                await Task.Run(() =>
                 {
                     using (var vorbisStream = new VorbisWaveReader(Path))
                     using (var loop = new LoopStream(vorbisStream))
                     using (var waveOut = new WaveOutEvent())
                     {
                         waveOut.Init(loop);
-                        while (true)
+                        while (isPlaying != false)
                         {
                             waveOut.Play();
-                            while (waveOut.PlaybackState != PlaybackState.Stopped)
+                            while (waveOut.PlaybackState != PlaybackState.Stopped
+                                    && isPlaying != false)
                             {
                                 Thread.Sleep(100);
                             }
+                            waveOut.Dispose();
                         }
+                        
                     }
                 });
-                musicThread.IsBackground = true;
-                musicThread.Start();
             }
         }
 
-        public override void Play()
+        public async override void Play()
         {
             if (!isPlaying)
             {
                 isPlaying = true;
-                musicThread = new Thread(() =>
-                {
+
+                await Task.Run(() => {
                     using (var vorbisStream = new VorbisWaveReader(Path))
                     using (var waveOut = new NAudio.Wave.WaveOutEvent())
                     {
                         waveOut.Init(vorbisStream);
                         waveOut.Play();
-                        while (waveOut.PlaybackState != PlaybackState.Stopped)
+                        while (waveOut.PlaybackState != PlaybackState.Stopped
+                                && isPlaying != false)
                         {
                             Thread.Sleep(100);
                         }
+                        waveOut.Dispose();
                         isPlaying = false;
                     }
                 });
-                musicThread.IsBackground = true;
-                musicThread.Start();
             }
         }
 
@@ -88,7 +91,6 @@ namespace SpaceTail.Source.Audio
         {
             if (isPlaying)
             {
-                musicThread.Abort();
                 isPlaying = false;
             }
         }

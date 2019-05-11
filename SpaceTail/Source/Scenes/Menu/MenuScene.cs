@@ -173,7 +173,6 @@ namespace SpaceTail
 
                     menuItems[selectedItem].SetSelected(true);
                     AudioManager.PlaySound("MenuNav");
-
                 }
 
                 if (key == ConsoleKey.LeftArrow

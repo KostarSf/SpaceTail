@@ -1,10 +1,5 @@
-﻿using NAudio.Wave;
-using SpaceTail.Source.Audio;
-using System;
+﻿using SpaceTail.Source.Audio;
 using System.Collections.Generic;
-using System.IO;
-using System.Media;
-using System.Threading;
 
 namespace SpaceTail
 {
@@ -50,6 +45,37 @@ namespace SpaceTail
             }
         }
 
+        public static void StopAllMusic()
+        {
+            foreach (Music music in MusicList)
+            {
+                music.Stop();
+            }
+        }
+
+        public static void StopSound(string soundName)
+        {
+            foreach (Sound sound in SoundList)
+            {
+                if (sound.Name == soundName)
+                {
+                    sound.Stop();
+                }
+
+            }
+        }
+
+        public static void StopAllSounds()
+        {
+            foreach (Sound sound in SoundList)
+            {
+
+                sound.Stop();
+
+
+            }
+        }
+
         public static void PlaySound(string soundName)
         {
             foreach (Sound sound in SoundList)
@@ -58,10 +84,21 @@ namespace SpaceTail
                 {
                     sound.Play();
                 }
-                    
+
             }
         }
 
+        public static void LoopSound(string soundName)
+        {
+            foreach (Sound sound in SoundList)
+            {
+                if (sound.Name == soundName)
+                {
+                    sound.Loop();
+                }
+
+            }
+        }
 
         //public static void PlaySound(string fileName)
         //{
@@ -95,6 +132,6 @@ namespace SpaceTail
         //    }
         //}
 
-        
+
     }
 }

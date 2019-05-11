@@ -59,6 +59,9 @@ namespace SpaceTail
         {
             string text = "Программа завершена. Нажмите любую клавишу для выхода ";
 
+            AudioManager.StopAllMusic();
+            AudioManager.StopAllSounds();
+
             Console.Clear();
             Console.CursorVisible = true;
 

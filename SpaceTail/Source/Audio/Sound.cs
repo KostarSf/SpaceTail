@@ -1,9 +1,4 @@
 ﻿using NAudio.Wave;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -17,7 +12,6 @@ namespace SpaceTail.Source.Audio
 
         AudioFileReader audioFile;
         WaveOutEvent outputDevice;
-        Thread audioThread;
 
         public Sound(string name, string path)
         {
@@ -28,43 +22,52 @@ namespace SpaceTail.Source.Audio
 
         protected override void InitAudio()
         {
-            
-            audioFile = new AudioFileReader(Path);
-            outputDevice = new WaveOutEvent();
-            outputDevice.Init(audioFile);
-        }
 
-        public override void Loop()
-        {
-            if (!isPlaying)
+            using (audioFile = new AudioFileReader(Path))
+            using (outputDevice = new WaveOutEvent())
             {
-                isPlaying = true;
-                audioThread = new Thread(() =>
-                {
-                    using (var audioFile = new AudioFileReader(Path))
-                    using (var outputDevice = new WaveOutEvent())
-                    {
-                        outputDevice.Init(audioFile);
-                        while (true)
-                        {
-                            outputDevice.Play();
-                            while (outputDevice.PlaybackState != PlaybackState.Stopped)
-                            {
-                                Thread.Sleep(100);
-                            }
-                        }
-                    }
-                });
-                audioThread.Start();
+                outputDevice.Init(audioFile);
             }
         }
 
-        public override void Play()
+        public async override void Loop()
         {
             if (!isPlaying)
             {
                 isPlaying = true;
-                audioThread = new Thread(() =>
+
+                await Task.Run(() =>
+                {
+                    using (var audioFile = new AudioFileReader(Path))
+                    using (var loop = new LoopStream(audioFile))
+                    using (var outputDevice = new WaveOutEvent())
+                    {
+                        outputDevice.Init(loop);
+                        outputDevice.Play();
+                        while (outputDevice.PlaybackState != PlaybackState.Stopped
+                                && isPlaying != false)
+                        {
+                            Thread.Sleep(100);
+                        }
+                        outputDevice.Dispose();
+                    }
+                });
+            }
+        }
+
+        public async override void Play()
+        {
+            if (!isPlaying)
+            {
+                isPlaying = true;
+
+                await Task.Run(() =>
+                {
+                    Thread.Sleep(100);
+                    isPlaying = false;
+                });
+
+                await Task.Run(() =>
                 {
                     using (var audioFile = new AudioFileReader(Path))
                     using (var outputDevice = new WaveOutEvent())
@@ -75,10 +78,9 @@ namespace SpaceTail.Source.Audio
                         {
                             Thread.Sleep(100);
                         }
-                        isPlaying = false;
+                        outputDevice.Dispose();
                     }
                 });
-                audioThread.Start();
             }
         }
 
@@ -86,7 +88,7 @@ namespace SpaceTail.Source.Audio
         {
             if (isPlaying)
             {
-                audioThread.Abort();
+
                 isPlaying = false;
             }
         }

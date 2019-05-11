@@ -88,6 +88,7 @@ namespace SpaceTail
 
         internal void PlayMenuScene()
         {
+            Debug.WriteLine("Musics: " + AudioManager.MusicList.Count);
             Debug.WriteLine("Sounds: " + AudioManager.SoundList.Count);
             AudioManager.PlayMusic("WhisperOfStars");
             mainMenu.Show();
