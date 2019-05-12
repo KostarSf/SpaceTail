@@ -1,13 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace SpaceTail
 {
-    class Scene
+    class Program
     {
-        public Scene()
+        static void Main(string[] args)
         {
-
+            
         }
     }
 }
