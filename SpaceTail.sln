@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.28803.352
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpaceTail", "SpaceTail\SpaceTail.csproj", "{67B0FCF9-801B-4B1F-AF57-CA1C8EDB3FE3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpaceTail", "SpaceTail\SpaceTail.csproj", "{94881465-3E46-4BBD-9229-1D2D527F1FA1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{67B0FCF9-801B-4B1F-AF57-CA1C8EDB3FE3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{67B0FCF9-801B-4B1F-AF57-CA1C8EDB3FE3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{67B0FCF9-801B-4B1F-AF57-CA1C8EDB3FE3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{67B0FCF9-801B-4B1F-AF57-CA1C8EDB3FE3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{94881465-3E46-4BBD-9229-1D2D527F1FA1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{94881465-3E46-4BBD-9229-1D2D527F1FA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{94881465-3E46-4BBD-9229-1D2D527F1FA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{94881465-3E46-4BBD-9229-1D2D527F1FA1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {08472816-0E1D-455D-8DDE-E64B5E73C2DC}
+		SolutionGuid = {8E585538-F5E8-45E7-B18A-9B7FAA93C680}
 	EndGlobalSection
 EndGlobal
