@@ -67,11 +67,11 @@ namespace SpaceTail
                 case Config.Option.WindowHeight:
                     return Config.WindowHeight.ToString();
                 case Config.Option.AudioMaster:
-                    return Config.AudioMaster.ToString();
+                    return (Config.AudioMaster * 10).ToString();
                 case Config.Option.AudioSounds:
-                    return Config.AudioSounds.ToString();
+                    return (Config.AudioSounds * 10).ToString();
                 case Config.Option.AudioMusic:
-                    return Config.AudioMusic.ToString();
+                    return (Config.AudioMusic * 10).ToString();
             }
 
             return "";

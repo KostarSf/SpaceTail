@@ -30,12 +30,11 @@ namespace SpaceTail
             exitMenu = new MenuScene();
 
             mainMenu.addMenuItem(new MenuItem("Начать Игру", gameMenu));
-            mainMenu.setMenuItemAttributes(true, true, true);
+            mainMenu.setMenuItemAttributes(true, true);
             mainMenu.addMenuItem(new MenuItem("Загрузить", loadMenu));
             mainMenu.setMenuItemAttributes(false, false);
             mainMenu.addVoidMenuItem();
             mainMenu.addMenuItem(new MenuItem("Рекорды", scoreMenu));
-            mainMenu.setMenuItemAttributes(false, true, true);
             mainMenu.addMenuItem(new MenuItem("Настройки", optionsMenu));
             mainMenu.addMenuItem(new MenuItem("Об Игре", aboutMenu));
             mainMenu.addVoidMenuItem();
