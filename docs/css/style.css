@@ -149,6 +149,8 @@ a.author_link {
     color: white;
     font-size: 24pt;
     font-family: 'Inconsolata', monospace;
+
+    outline: none;
 }
 
 a.author_link:hover > span {
@@ -166,6 +168,8 @@ p.about_link {
     color: #777;
     font-size: 24pt;
     font-family: 'Inconsolata', monospace;
+
+    outline: none;
 }
 
 p.about_link:hover {
