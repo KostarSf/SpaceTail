@@ -227,3 +227,24 @@ div.bottom {
         display: none;
     }
 }
+
+@media screen and (max-width: 450px) {
+    h1 {
+        font-size: 40pt;
+    }
+    h2 {
+        font-size: 15pt;
+    }
+    p.first {
+        font-size: 30pt;
+    }
+    p.second {
+        margin: 0;
+        padding-right: 1rem;
+        font-size: 15pt;
+    }
+    a.author_link,
+    p.about_link {
+        font-size: 15pt;
+    }
+}
