@@ -1,4 +1,17 @@
-@import url('https://fonts.googleapis.com/css?family=Abel|Inconsolata|Merienda+One&display=swap');
+@font-face { 
+    font-family: "Abel";
+    src: url(../font/Abel-Regular.ttf) format("truetype");
+}
+
+@font-face { 
+    font-family: "Inconsolata";
+    src: url(../font/Inconsolata-Regular.ttf) format("truetype");
+}
+
+@font-face { 
+    font-family: "Merienda One";
+    src: url(../font/MeriendaOne-Regular.ttf) format("truetype");
+}
 
 html, body {
     height: 100%;
@@ -59,7 +72,7 @@ h1::after {
     display: inline-block;
     width: 200px;
     height: 100px;
-    background: url(tail.png) no-repeat bottom;
+    background: url(../img/tail.png) no-repeat bottom;
     background-size: contain;
 
     transition: all 0.2s ease-out;
