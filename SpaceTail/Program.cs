@@ -1,9 +1,117 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace SpaceTail
 {
+    class Game
+    {
+        static Task inputCycle;
+        static int inputCount = 0;
+
+        static bool gameIsRunning;
+        static int[] consoleSizes = { Console.WindowWidth, Console.WindowHeight };
+
+        static int fps = 30;
+        static int targetCycleTime = 1000 / fps;
+
+        static DateTime time;
+
+        public static void StartGame()
+        {
+            gameIsRunning = true;
+            inputCount = 0;
+            Screen.Clear();
+
+            Stopwatch cycleTimer = new Stopwatch();
+            int currentCycleTime;
+            int cycleCounter = 0;
+
+            Stopwatch fpsTimer = new Stopwatch();
+
+            Console.SetBufferSize(consoleSizes[0], consoleSizes[1]);
+
+            inputCycle = new Task(UpdateInput);
+            inputCycle.Start();
+
+            while (gameIsRunning)
+            {
+                fpsTimer.Restart();
+                cycleTimer.Restart();
+
+                //UpdateLogic();
+                DrawFrame();
+
+                cycleTimer.Stop();
+                currentCycleTime = (int)cycleTimer.ElapsedMilliseconds;
+
+                if (currentCycleTime < targetCycleTime)
+                {
+                    Thread.Sleep(targetCycleTime - currentCycleTime);
+                }
+
+                Console.SetCursorPosition(0, 0);
+                cycleCounter++;
+                switch (cycleCounter)
+                {
+                    case 1:
+                        Console.Write($@"fps: {fpsTimer.ElapsedMilliseconds}ms/f  -   ");
+                        break;
+                    case 2:
+                        Console.Write($@"fps: {fpsTimer.ElapsedMilliseconds}ms/f  \   ");
+                        break;
+                    case 3:
+                        Console.Write($@"fps: {fpsTimer.ElapsedMilliseconds}ms/f  |   ");
+                        break;
+                    case 4:
+                        Console.Write($@"fps: {fpsTimer.ElapsedMilliseconds}ms/f  /   ");
+                        cycleCounter = 0;
+                        break;
+                }
+            }
+
+            inputCycle.Wait();
+            inputCycle.Dispose();
+            Program.DrawConsoleMenu(Program.Menu.DevMenu);
+        }
+
+        private static void UpdateInput()
+        {
+            ConsoleKeyInfo pressedKey;
+
+            while (gameIsRunning)
+            {
+                pressedKey = Console.ReadKey(true);
+                inputCount++;
+
+                if (pressedKey.Key == ConsoleKey.Q)
+                {
+                    gameIsRunning = false;
+                }
+            }
+        }
+
+        private static void DrawFrame()
+        {
+            Screen.DisableCursor();
+            try
+            {
+                Console.SetWindowSize(consoleSizes[0], consoleSizes[1]);
+                Console.SetBufferSize(consoleSizes[0], consoleSizes[1]);
+
+                Console.SetCursorPosition(0, 1);
+                Console.Write($"Pressed keys count: {inputCount}");
+                Console.SetCursorPosition(0, 2);
+                Console.Write($"'Q' to quit");
+            } catch (Exception e)
+            {
+                Screen.Clear();
+            }
+        }
+    }
     class Input
     {
         public static char GetInputKeyChar(bool showCharInConsole)
@@ -18,7 +126,36 @@ namespace SpaceTail
     }
     class Screen
     {
+        public static Dictionary<string, ConsoleColor> Colors;
+
         static string leftMargin = " ";
+
+        public static void Init()
+        {
+            Colors = new Dictionary<string, ConsoleColor>();
+            Colors.Add("BLACK",         ConsoleColor.Black);
+            Colors.Add("BLUE",          ConsoleColor.Blue);
+            Colors.Add("CYAN",          ConsoleColor.Cyan);
+            Colors.Add("DARKBLUE",      ConsoleColor.DarkBlue);
+            Colors.Add("DARKCYAN",      ConsoleColor.DarkCyan);
+            Colors.Add("DARKGRAY",      ConsoleColor.DarkGray);
+            Colors.Add("DARKGREEN",     ConsoleColor.DarkGreen);
+            Colors.Add("DARKMAGENTA",   ConsoleColor.DarkMagenta);
+            Colors.Add("DARKRED",       ConsoleColor.DarkRed);
+            Colors.Add("DARKYELLOW",    ConsoleColor.DarkYellow);
+            Colors.Add("GRAY",          ConsoleColor.Gray);
+            Colors.Add("GREEN",         ConsoleColor.Green);
+            Colors.Add("MAGENTA",       ConsoleColor.Magenta);
+            Colors.Add("RED",           ConsoleColor.Red);
+            Colors.Add("WHITE",         ConsoleColor.White);
+            Colors.Add("YELLOW",        ConsoleColor.Yellow);
+
+            Console.SetWindowSize(70, 20);
+            Console.SetBufferSize(70, 20);
+
+            Console.Title = "SpaceTail";
+        }
+
         public static void SimpleTextLine(string output)
         {
             Console.WriteLine(leftMargin + output);
@@ -57,27 +194,25 @@ namespace SpaceTail
             //"Some [red,]text that [,grn]must be [blu,gry]colored"
 
             string rawLine = line;
-            string clearLine = "";
+            StringBuilder colorKeys = new StringBuilder();
 
             Dictionary<int, string> colorParts = new Dictionary<int, string>();
+
             for (int index = 0; index < rawLine.Length; index++)
             {
-                if (rawLine.Length > index && rawLine[index] == '[')
+                if (rawLine[index] == '[')
                 {
-                    if (rawLine.Length > index + 5 && rawLine[index + 5] == ']')
+                    colorKeys.Clear();
+                    int i = 0;
+                    while (rawLine[index + i++ + 1] != ']')
                     {
-                        colorParts.Add(index, rawLine.Substring(index + 1, 4));
-                        rawLine = rawLine.Remove(index, 6);
-                        index--;
+                        colorKeys.Append(rawLine[index + i]);
                     }
-                    else if (rawLine.Length > index + 8 && rawLine[index + 8] == ']')
-                    {
-                        colorParts.Add(index, rawLine.Substring(index + 1, 7));
-                        rawLine = rawLine.Remove(index , 9);
-                        index--;
-                    }
-                }
+                    colorParts.Add(index, colorKeys.ToString());
 
+                    rawLine = rawLine.Remove(index, i + 1);
+                    index--;
+                }
             }
 
             StringBuilder linePart = new StringBuilder();
@@ -86,7 +221,7 @@ namespace SpaceTail
                 if (colorParts.ContainsKey(index))
                 {
                     Console.Write(linePart.ToString());
-                    setColor(colorParts[index]);
+                    setColorFromParseValue(colorParts[index]);
 
                     linePart.Clear();
                     linePart.Append(rawLine[index]);
@@ -104,140 +239,41 @@ namespace SpaceTail
 
             ResetColor();
 
-            void setColor(string value)
+            void setColorFromParseValue(string value)
             {
-                string[] values = value.ToUpper().Split(',');
+                string[] colors = value.Split(',');
 
-                if (values[0].Length == 3)
+                SetColors(colors[0].Trim(), colors[1].Trim());
+            }
+
+            void SetColors(string fgColor, string bgColor)
+            {
+                fgColor = fgColor.Trim().ToUpper();
+                bgColor = bgColor.Trim().ToUpper();
+
+                if (Colors.ContainsKey(fgColor))
                 {
-                    Color(values[0]);
+                    Console.ForegroundColor = Colors[fgColor];
+                }
+                else if (fgColor == "RESET")
+                {
+                    ConsoleColor lastBg = Console.BackgroundColor;
+                    Console.ResetColor();
+                    Console.BackgroundColor = lastBg;
                 }
 
-                if (values[1].Length == 3)
+                if (Colors.ContainsKey(bgColor))
                 {
-                    ColorBG(values[1]);
+                    Console.BackgroundColor = Colors[bgColor];
+                }
+                else if (bgColor == "RESET")
+                {
+                    ConsoleColor lastFg = Console.ForegroundColor;
+                    Console.ResetColor();
+                    Console.ForegroundColor = lastFg;
                 }
             }
 
-            void Color(string color)
-            {
-                switch (color)
-                {
-                    case "BLA":
-                        Console.ForegroundColor = ConsoleColor.Black;
-                        break;
-                    case "BLU":
-                        Console.ForegroundColor = ConsoleColor.Blue;
-                        break;
-                    case "CYA":
-                        Console.ForegroundColor = ConsoleColor.Cyan;
-                        break;
-                    case "DBL":
-                        Console.ForegroundColor = ConsoleColor.DarkBlue;
-                        break;
-                    case "DCY":
-                        Console.ForegroundColor = ConsoleColor.DarkCyan;
-                        break;
-                    case "DGY":
-                        Console.ForegroundColor = ConsoleColor.DarkGray;
-                        break;
-                    case "DGN":
-                        Console.ForegroundColor = ConsoleColor.DarkGreen;
-                        break;
-                    case "DMG":
-                        Console.ForegroundColor = ConsoleColor.DarkMagenta;
-                        break;
-                    case "DRE":
-                        Console.ForegroundColor = ConsoleColor.DarkRed;
-                        break;
-                    case "DYE":
-                        Console.ForegroundColor = ConsoleColor.DarkYellow;
-                        break;
-                    case "GRA":
-                        Console.ForegroundColor = ConsoleColor.Gray;
-                        break;
-                    case "GRE":
-                        Console.ForegroundColor = ConsoleColor.Green;
-                        break;
-                    case "MAG":
-                        Console.ForegroundColor = ConsoleColor.Magenta;
-                        break;
-                    case "RED":
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        break;
-                    case "WHI":
-                        Console.ForegroundColor = ConsoleColor.White;
-                        break;
-                    case "YEL":
-                        Console.ForegroundColor = ConsoleColor.Yellow;
-                        break;
-                    case "RST":
-                        ConsoleColor backColor = Console.BackgroundColor;
-                        Console.ResetColor();
-                        Console.BackgroundColor = backColor;
-                        break;
-                }
-            }
-
-            void ColorBG(string color)
-            {
-                switch (color)
-                {
-                    case "BLA":
-                        Console.BackgroundColor = ConsoleColor.Black;
-                        break;
-                    case "BLU":
-                        Console.BackgroundColor = ConsoleColor.Blue;
-                        break;
-                    case "CYA":
-                        Console.BackgroundColor = ConsoleColor.Cyan;
-                        break;
-                    case "DBL":
-                        Console.BackgroundColor = ConsoleColor.DarkBlue;
-                        break;
-                    case "DCY":
-                        Console.BackgroundColor = ConsoleColor.DarkCyan;
-                        break;
-                    case "DGY":
-                        Console.BackgroundColor = ConsoleColor.DarkGray;
-                        break;
-                    case "DGN":
-                        Console.BackgroundColor = ConsoleColor.DarkGreen;
-                        break;
-                    case "DMG":
-                        Console.BackgroundColor = ConsoleColor.DarkMagenta;
-                        break;
-                    case "DRE":
-                        Console.BackgroundColor = ConsoleColor.DarkRed;
-                        break;
-                    case "DYE":
-                        Console.BackgroundColor = ConsoleColor.DarkYellow;
-                        break;
-                    case "GRA":
-                        Console.BackgroundColor = ConsoleColor.Gray;
-                        break;
-                    case "GRE":
-                        Console.BackgroundColor = ConsoleColor.Green;
-                        break;
-                    case "MAG":
-                        Console.BackgroundColor = ConsoleColor.Magenta;
-                        break;
-                    case "RED":
-                        Console.BackgroundColor = ConsoleColor.Red;
-                        break;
-                    case "WHI":
-                        Console.BackgroundColor = ConsoleColor.White;
-                        break;
-                    case "YEL":
-                        Console.BackgroundColor = ConsoleColor.Yellow;
-                        break;
-                    case "RST":
-                        ConsoleColor textColor = Console.ForegroundColor;
-                        Console.ResetColor();
-                        Console.ForegroundColor = textColor;
-                        break;
-                }
-            }
         }
 
         public static void ColoredOutput(string line, bool useMargin)
@@ -269,8 +305,8 @@ namespace SpaceTail
 
         static string[] devMenu_start =
         {
-            "Welcome to [dbl,]SpaceTail[rst,]!",
-            "Created by [dgy,]KostarSf",
+            "Welcome to [DarkBlue,]SpaceTail[Reset,]!",
+            "Created by [DarkGray,]KostarSf",
             "Version " + appVersion,
             "",
             " - Menu -",
@@ -281,11 +317,11 @@ namespace SpaceTail
 
         static string[] devMenu_about =
         {
-            "[dbl,]SpaceTail[rst,] " + appVersion,
-            "Created by [dgy,]KostarSf",
+            "[DarkBlue,]SpaceTail[Reset,] " + appVersion,
+            "Created by [DarkGray,]KostarSf",
             "",
-            "[dgy,]A story about one pony",
-            "[dgy,]that stuck alone in space.",
+            "[DarkGray,]A story about one pony",
+            "[DarkGray,]that stuck alone in space.",
             "",
             " - Menu -",
             "1. Github author's page: github.com/KostarSf",
@@ -293,7 +329,7 @@ namespace SpaceTail
             "3. Back",
         };
 
-        enum Menu
+        public enum Menu
         {
             DevMenu,
             DevMenu_StartGame,
@@ -303,27 +339,13 @@ namespace SpaceTail
 
         static void Main(string[] args)
         {
+            Screen.Init();
             Screen.DisableCursor();
             Screen.Clear();
-            //tryingInColoredLines();
-            drawConsoleMenu(Menu.DevMenu);
+            DrawConsoleMenu(Menu.DevMenu);
         }
 
-        private static void tryingInColoredLines()
-        {
-            String singleLine = "[blu,]Some [red,]text that [mag,grn]must be [blu,gry]colored";
-
-            String[] multiLine = {
-                "[DGN,]Some [red,]text that [mag,gre]must be [blu,gra]colored",
-                "Some [blu,]text that[,gre] must be[red,gra] colored",
-            };
-
-            Console.CursorLeft = 3;
-            Screen.ColoredOutput(multiLine);
-
-        }
-
-        private static void drawConsoleMenu(Menu menuName)
+        public static void DrawConsoleMenu(Menu menuName)
         {
             int chosedMenu;
 
@@ -336,18 +358,21 @@ namespace SpaceTail
                     switch (chosedMenu)
                     {
                         case 1:
-                            drawConsoleMenu(Menu.DevMenu_StartGame);
+                            DrawConsoleMenu(Menu.DevMenu_StartGame);
                             break;
                         case 2:
-                            drawConsoleMenu(Menu.DevMenu_About);
+                            DrawConsoleMenu(Menu.DevMenu_About);
                             break;
                         case 3:
-                            drawConsoleMenu(Menu.DevMenu_Quit);
+                            DrawConsoleMenu(Menu.DevMenu_Quit);
                             break;
                         default:
-                            drawConsoleMenu(Menu.DevMenu);
+                            DrawConsoleMenu(Menu.DevMenu);
                             break;
                     }
+                    break;
+                case Menu.DevMenu_StartGame:
+                    Game.StartGame();
                     break;
                 case Menu.DevMenu_About:
                     Console.Clear();
@@ -356,18 +381,18 @@ namespace SpaceTail
                     switch (chosedMenu)
                     {
                         case 1:
-                            drawConsoleMenu(Menu.DevMenu_About);
+                            DrawConsoleMenu(Menu.DevMenu_About);
                             //System.Diagnostics.Process.Start("https://github.com/KostarSf");
                             break;
                         case 2:
-                            drawConsoleMenu(Menu.DevMenu_About);
+                            DrawConsoleMenu(Menu.DevMenu_About);
                             //System.Diagnostics.Process.Start("https://kostarsf.github.io/SpaceTail");
                             break;
                         case 3:
-                            drawConsoleMenu(Menu.DevMenu);
+                            DrawConsoleMenu(Menu.DevMenu);
                             break;
                         default:
-                            drawConsoleMenu(Menu.DevMenu_About);
+                            DrawConsoleMenu(Menu.DevMenu_About);
                             break;
                     }
                     break;
@@ -379,7 +404,7 @@ namespace SpaceTail
                     Screen.SkipLine();
                     break;
                 default:
-                    drawConsoleMenu(Menu.DevMenu);
+                    DrawConsoleMenu(Menu.DevMenu);
                     break;
             }
         }
@@ -389,9 +414,10 @@ namespace SpaceTail
             int inputNumber = 0;
             Screen.SkipLine();
             Screen.SimpleText("Your choise is.. ");
+            int[] inputPos = { Console.CursorLeft, Console.CursorTop };
             while (Input.GetDigit(ref inputNumber) != true)
             {
-                Console.CursorLeft -= 1;
+                Console.SetCursorPosition(inputPos[0], inputPos[1]);
             }
             return inputNumber;
         }
