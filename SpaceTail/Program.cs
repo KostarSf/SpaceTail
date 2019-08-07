@@ -224,7 +224,24 @@ namespace SpaceTail
             }
         }
 
-        
+        internal void SetLength(int length)
+        {
+            if (Length == length) return;
+
+            Length = length;
+
+            if (charPixels.Count < Length)
+            {
+                while (charPixels.Count < Length)
+                {
+                    charPixels.Add(new CharPixel());
+                }
+            }
+            else if (charPixels.Count > Length)
+            {
+                charPixels.RemoveRange(Length, charPixels.Count - Length);
+            }
+        }
     }
     class FrameBorder
     {
@@ -257,35 +274,15 @@ namespace SpaceTail
         }
 
         public Frame AddBorderToFrame(Frame frame)
-        {   /*
-            int index;
-            //Вертикальные
-            
-            foreach (var line in frame.FrameLines)
-            {
-
-                for (index = 0; index < marginSize + 1; index++)
-                {
-                    line[index] = marginChar;
-                }
-                line[index] = right;
-
-                for (index = 0; index < marginSize; index++)
-                {
-                    line[line.Length - 1 - index] = marginChar;
-                }
-                line[line.Length - 1 - index] = left;
-            }
-            */
-
+        {   
+            // Вертикальные
             foreach (var line in frame.FrameLines)
             {
                 line.PutLine(Input.PutChars(marginChar, marginSize + 1) + leftBorder, 0);
                 line.PutReverseLine(Input.PutChars(marginChar, marginSize + 1) + rightBorder, 0, false);
             }
 
-            //Горизонтальные
-
+            // Горизонтальные
             for (int startIndex = marginSize + 1; startIndex < frame.Width - marginSize; startIndex++)
             {
                 if (marginSize < frame.FrameLines.Count)
@@ -298,6 +295,7 @@ namespace SpaceTail
                     }
                     frame.PutReverseColumn(Input.PutChars(marginChar, marginSize) + bottomBorder, 0, startIndex);
 
+                    // Углы
                     if (useCorners)
                     {
                         frame.PutReverseColumn(corners[2].ToString(), marginSize, marginSize + 1);
@@ -306,45 +304,6 @@ namespace SpaceTail
                 }
             }
 
-
-
-
-            /*
-            for (index = 0; index < marginSize; index++)
-            {
-                for (int i = 0; i < frame.FrameLines[index].Length; i++)
-                {
-                    frame.FrameLines[index][i] = marginChar;
-                }
-            }
-            
-            for (int i = marginSize + 1; i < frame.FrameLines[index].Length - (marginSize + 1); i++)
-            {
-                frame.FrameLines[index][i] = top;
-            }
-
-            for (index = 0; index < marginSize - 1; index++)
-            {
-                for (int i = 0; i < frame.FrameLines[frame.FrameLines.Count - 1 - index].Length; i++)
-                {
-                    frame.FrameLines[frame.FrameLines.Count - 1 - index][i] = marginChar;
-                }
-            }
-            for (int i = marginSize + 1; i < frame.FrameLines[index].Length - (marginSize + 1); i++)
-            {
-                frame.FrameLines[frame.FrameLines.Count - 1 - index][i] = bottom;
-            }
-            */
-
-            //Углы
-            /*
-            if (useCorners)
-            {
-                frame.FrameLines[marginSize][marginSize + 1] = corners[0];
-                frame.FrameLines[marginSize][frame.FrameLines[marginSize].Length - 2] = corners[1];
-                frame.FrameLines[frame.FrameLines.Count - 1][marginSize + 1] = corners[2];
-                frame.FrameLines[frame.FrameLines.Count - 1][frame.FrameLines[marginSize + 1].Length - 2] = corners[3];
-            }*/
             return frame;
         }
 
@@ -358,8 +317,8 @@ namespace SpaceTail
     {
         int frameWidth;
         int frameHeight;
-
         private List<CharLine> frameLines;
+
         FrameBorder border;
         bool useBorders;
 
@@ -391,13 +350,34 @@ namespace SpaceTail
             }
             else
             {
-                //может быть поменять и не чистить полностью, а прибавлять/удалять
-                //долго обновляется
+                // Долго обновляется
+
                 frameLines.Clear();
                 for (int line = 0; line < Height; line++)
                 {
                     frameLines.Add(new CharLine(Width));
                 }
+
+                // Проблемы с рамками фрейма
+
+                //frameLines.Capacity = Height;
+                //if (FrameLines.Count < Height)
+                //{
+                //    while (frameLines.Count < Height)
+                //    {
+                //        frameLines.Add(new CharLine(Width));
+                //    }
+                //}
+                //else if (FrameLines.Count > Height)
+                //{
+                //    frameLines.RemoveRange(Height, frameLines.Count - Height);
+                //}
+
+                //foreach (var line in frameLines)
+                //{
+                //    line.SetLength(Width);
+                //}
+
             }
         }
 
@@ -425,11 +405,7 @@ namespace SpaceTail
             {
                 border.AddBorderToFrame(this);
             }
-            /*
-            for (int i = 0; i < Height; i++)
-            {
-                Screen.DrawLine(0, i, frameLines[i].ToString());
-            } */
+
             foreach (var line in FrameLines)
             {
                 line.Draw(FrameLines.IndexOf(line));
@@ -437,21 +413,8 @@ namespace SpaceTail
         }
 
         public void AddLine(int stardIndex, int lineIndex, object obj)
-        {   /*
-            string line = obj.ToString();
-            for (int i = 0; i < line.Length; i++)
-            {
-                frameLines[y][x + i] = line[i];
-            }   
-            */
+        {   
             frameLines[lineIndex].PutLine(obj.ToString(), stardIndex);
-            try
-            {
-                
-            } catch (Exception e)
-            {
-                Game.GetSecretEnding(e);
-            }
         }
 
         internal void PutColumn(string line, int lineIndex, int startIndex)
@@ -476,30 +439,24 @@ namespace SpaceTail
 
         internal void Clear()
         {
+            // Перерисовка тех CharPixel, что были использованы TextSrite
+            // Могут возникать артефакты
+
             if (SpriteList != null)
             {
                 SetSpriteList(ClearSpriteList(SpriteList));
             }
 
-            //if (SpriteList != null)
+            // Перерисовка каждого CharPixel
+            // Очень долго на винде
+
+            //foreach (var line in FrameLines)
             //{
-            //    foreach (var sprite in SpriteList)
-            //    {
-            //        if (frameLines.Count > sprite.Y + border.Size - 1)
-            //        {
-            //            frameLines[sprite.Y + border.Size - 1].PutLine(Input.GetEmptyLine(sprite.Value[0].Length), sprite.X + border.Size);
-            //        }
-            //    }
+            //    line.Clear();
             //}
 
-
-
-            /*
-            foreach (var line in FrameLines)
-            {
-                line.Clear();
-            }
-            */
+            // Пересоздание CharLine
+            // Всё ещё долго на винде
 
             //frameLines.Clear();
             //for (int line = 0; line < Height; line++)
@@ -712,10 +669,12 @@ namespace SpaceTail
             SetColors(textColor, backColor);
         }
 
-        private void SetColors(ConsoleColor textColor, ConsoleColor backColor)
+        public TextSprite SetColors(ConsoleColor textColor, ConsoleColor backColor)
         {
             this.textColor = textColor;
             this.backColor = backColor;
+
+            return this;
         }
 
         public ConsoleColor[] GetColors()
@@ -857,7 +816,7 @@ namespace SpaceTail
                 fpsTimer.Restart();
                 cycleTimer.Restart();
 
-                //UpdateLogic();
+                UpdateLogic();
                 DrawFrame(frame);
 
                 cycleTimer.Stop();
@@ -868,9 +827,10 @@ namespace SpaceTail
                     Thread.Sleep(targetCycleTime - currentCycleTime);
                 }
 
-                //Console.SetCursorPosition(2, 1);
                 cycleCounter++;
-                
+
+                elapsedTime = Input.Average(fpsSmooth);
+
                 switch (elapsedTime.ToString().Length)
                 {
                     case 1:
@@ -879,17 +839,23 @@ namespace SpaceTail
                     case 2:
                         fpsOffset = " ";
                         break;
+                    case 3:
+                        fpsOffset = "";
+                        break;
                 }
 
                 fpsSmooth.RemoveAt(0);
                 fpsSmooth.Add((int)(1000 / fpsTimer.ElapsedMilliseconds));
-
-                elapsedTime = Input.Average(fpsSmooth);
             }
 
             inputCycle.Wait();
             inputCycle.Dispose();
             Program.DrawConsoleMenu(Program.Menu.DevMenu);
+        }
+
+        private static void UpdateLogic()
+        {
+            
         }
 
         private static void UpdateInput()
@@ -908,6 +874,10 @@ namespace SpaceTail
 
                 switch (pressedKey.Key)
                 {
+                    case ConsoleKey.Q:
+                        GameIsRunning = false;
+                        break;
+
                     case ConsoleKey.UpArrow:
                         if (TestPlayer.Y > 1)
                             TestPlayer.Y--;
@@ -955,9 +925,11 @@ namespace SpaceTail
 
         private static void DrawFrame(Frame frame)
         {
-            Screen.DisableCursor();
-
+            Screen.HideCursor();
             frame.Clear();
+
+            // Временное пристанище выводимых спрайтов, 
+            // вместо них тут будет метод добавления массива спрайтов из цикла с логикой
 
             Game.SpriteList.Clear();
             
@@ -971,66 +943,38 @@ namespace SpaceTail
 
             Game.SpriteList.Add(new TextSprite(testArray, 0, 0).SetAlign(Screen.TextAlign.Center).SetScreenAlign(Screen.ScreenAlign.MiddleCenter));
 
-
-            Game.SpriteList.Add(new TextSprite(TestPlayer.Symbol.ToString(), TestPlayer.X, TestPlayer.Y));
+            Game.SpriteList.Add(new TextSprite(TestPlayer.Symbol.ToString(), TestPlayer.X, TestPlayer.Y).SetColors(ConsoleColor.Red, Input.GetDefaultBackgroundColor()));
 
             //Слежение за обновлением размера консоли
-            try
+
+            if (Console.WindowWidth != lastWindowWidth)
             {
-                if (Console.WindowWidth != lastWindowWidth)
-                {
-                    lastWindowWidth = Console.WindowWidth;
-                    Console.Clear(); //Убрать, когда появится буфер кадров
-                    frame.FitSizesToWindow();
-                }
+                lastWindowWidth = Console.WindowWidth;
+                Console.Clear(); //Убрать, когда появится буфер кадров
+                frame.FitSizesToWindow();
+            }
 
-                if (Console.WindowHeight != lastWindowHeight)
-                {
-                    lastWindowHeight = Console.WindowHeight;
-                    frame.FitSizesToWindow();
-                }
+            if (Console.WindowHeight != lastWindowHeight)
+            {
+                lastWindowHeight = Console.WindowHeight;
+                frame.FitSizesToWindow();
+            }
 
-                if (Console.BufferHeight > Console.WindowHeight)
+            if (Console.BufferHeight > Console.WindowHeight)
+            {
+                Console.Clear();
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                 {
-                    Console.Clear();
                     Console.BufferHeight = Console.WindowHeight;
-                    if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-                    {
-                        Console.WindowWidth = Console.BufferWidth;
-                    }
-                    frame.FitSizesToWindow();
+                    Console.WindowWidth = Console.BufferWidth;
                 }
-            } catch (Exception)
-            {
-                Screen.Clear();
-                exceptionCount++;
+                frame.FitSizesToWindow();
             }
 
             //Вывод графики
 
             frame.SetSpriteList(Game.SpriteList);
             frame.Draw();
-            try
-            {
-                //frame.AddLine(3,2, Game.GetFPS(frame));
-
-                //frame.AddLine(3, 3, Console.WindowWidth);
-                //frame.AddLine(3, 4, Console.BufferWidth);
-
-                //frame.AddLine(3, 6, Console.WindowHeight);
-                //frame.AddLine(3, 7, Console.BufferHeight);
-
-                //frame.AddLine(3, 9, exceptionCount);
-
-                //frame.AddLine(TestPlayer.X, TestPlayer.Y, TestPlayer.Symbol);
-
-                
-            }
-            catch (Exception)
-            {
-                Screen.Clear();
-                exceptionCount++;
-            }
         }
 
         private static string GetFPS(Frame frame)
@@ -1040,19 +984,15 @@ namespace SpaceTail
             switch (cycleCounter)
             {
                 case 1:
-                    //Console.Write($@"fps: {fpsTimer.ElapsedMilliseconds}ms/f  -   ");
                     fps.Append($@"fps: {fpsOffset}{elapsedTime}  -   ");
                     break;
                 case 2:
-                    //Console.Write($@"fps: {fpsTimer.ElapsedMilliseconds}ms/f  \   ");
                     fps.Append($@"fps: {fpsOffset}{elapsedTime}  \   ");
                     break;
                 case 3:
-                    //Console.Write($@"fps: {fpsTimer.ElapsedMilliseconds}ms/f  |   ");
                     fps.Append($@"fps: {fpsOffset}{elapsedTime}  |   ");
                     break;
                 case 4:
-                    //Console.Write($@"fps: {fpsTimer.ElapsedMilliseconds}ms/f  /   ");
                     fps.Append($@"fps: {fpsOffset}{elapsedTime}  /   ");
                     cycleCounter = 0;
                     break;
@@ -1061,19 +1001,15 @@ namespace SpaceTail
             return fps.ToString();
         }
 
-        private static void drawFrameBorders()
-        {
-            throw new NotImplementedException();
-        }
-
         internal static void GetSecretEnding(Exception e)
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
                 Console.WindowHeight = 20;
-                Screen.EnableCursor();
                 Console.SetCursorPosition(0, 0);
             }
+
+            Screen.ShowCursor();
 
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("\n\n\n\n The secret exit way has been applied! ^_^\n");
@@ -1226,7 +1162,7 @@ namespace SpaceTail
             {
                 Console.SetWindowSize(70, 20);
                 Console.SetBufferSize(70, 20);
-                Console.SetWindowSize(70, 20);
+                Console.SetWindowSize(70, 20);  // Убирает отступ от скролла
             }
 
             Console.Title = "SpaceTail";
@@ -1240,11 +1176,11 @@ namespace SpaceTail
         {
             Console.Write(leftMargin + output);
         }
-        public static void DisableCursor()
+        public static void HideCursor()
         {
             Console.CursorVisible = false;
         }
-        public static void EnableCursor()
+        public static void ShowCursor()
         {
             Console.CursorVisible = true;
         }
@@ -1265,13 +1201,6 @@ namespace SpaceTail
             if (Console.WindowHeight > 0)
             {
                 Console.Clear();
-            }
-            try
-            {
-                
-            } catch (Exception e)
-            {
-                Game.GetSecretEnding(e);
             }
         }
 
@@ -1359,7 +1288,6 @@ namespace SpaceTail
                     Console.ForegroundColor = lastFg;
                 }
             }
-
         }
 
         public static void ColoredOutput(string line, bool useMargin)
@@ -1446,7 +1374,7 @@ namespace SpaceTail
         static void Main(string[] args)
         {
             Screen.Init();
-            Screen.DisableCursor();
+            Screen.HideCursor();
             Screen.Clear();
             DrawConsoleMenu(Menu.DevMenu);
         }
@@ -1477,9 +1405,11 @@ namespace SpaceTail
                             break;
                     }
                     break;
+
                 case Menu.DevMenu_StartGame:
                     Game.StartGame();
                     break;
+
                 case Menu.DevMenu_About:
                     Console.Clear();
                     drawTextArray(devMenu_about);
@@ -1502,13 +1432,15 @@ namespace SpaceTail
                             break;
                     }
                     break;
+
                 case Menu.DevMenu_Quit:
-                    Screen.EnableCursor();
+                    Screen.ShowCursor();
                     Screen.SkipLines(2);
                     Screen.SimpleText("Farewell! (press any key) ");
                     Console.ReadKey(true);
                     Screen.SkipLine();
                     break;
+
                 default:
                     DrawConsoleMenu(Menu.DevMenu);
                     break;
@@ -1518,13 +1450,16 @@ namespace SpaceTail
         private static int getIntKeyInput()
         {
             int inputNumber = 0;
+            int[] inputPos = { Console.CursorLeft, Console.CursorTop };
+
             Screen.SkipLine();
             Screen.SimpleText("Your choise is.. ");
-            int[] inputPos = { Console.CursorLeft, Console.CursorTop };
+
             while (Input.GetDigit(ref inputNumber) != true)
             {
                 Console.SetCursorPosition(inputPos[0], inputPos[1]);
             }
+
             return inputNumber;
         }
 
