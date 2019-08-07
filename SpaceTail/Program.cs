@@ -960,7 +960,7 @@ namespace SpaceTail
             frame.Clear();
 
             Game.SpriteList.Clear();
-            /*
+            
             Game.SpriteList.Add(new TextSprite(Game.GetFPS(frame), 2, 1));
             Game.SpriteList.Add(new TextSprite("'q' to quit", 2, 2));
             Game.SpriteList.Add(new TextSprite("1, 2, 3, 6, 9, 0 - time control", 2, 3));
@@ -971,20 +971,6 @@ namespace SpaceTail
 
             Game.SpriteList.Add(new TextSprite(testArray, 0, 0).SetAlign(Screen.TextAlign.Center).SetScreenAlign(Screen.ScreenAlign.MiddleCenter));
 
-            
-            */
-
-            Game.SpriteList.Add(new TextSprite(testArray, 1, 1).SetScreenAlign(Screen.ScreenAlign.TopLeft).SetAlign(Screen.TextAlign.Left));
-            Game.SpriteList.Add(new TextSprite(testArray, 0, 1).SetScreenAlign(Screen.ScreenAlign.TopCenter).SetAlign(Screen.TextAlign.Center));
-            Game.SpriteList.Add(new TextSprite(testArray, 1, 1).SetScreenAlign(Screen.ScreenAlign.TopRight).SetAlign(Screen.TextAlign.Right));
-
-            Game.SpriteList.Add(new TextSprite(testArray, 1, 0).SetScreenAlign(Screen.ScreenAlign.MiddleLeft).SetAlign(Screen.TextAlign.Center));
-            Game.SpriteList.Add(new TextSprite(testArray, 0, 0).SetScreenAlign(Screen.ScreenAlign.MiddleCenter).SetAlign(Screen.TextAlign.Right));
-            Game.SpriteList.Add(new TextSprite(testArray, 1, 0).SetScreenAlign(Screen.ScreenAlign.MiddleRight).SetAlign(Screen.TextAlign.Left));
-
-            Game.SpriteList.Add(new TextSprite(testArray, 1, 1).SetScreenAlign(Screen.ScreenAlign.BottomLeft).SetAlign(Screen.TextAlign.Right));
-            Game.SpriteList.Add(new TextSprite(testArray, 0, 1).SetScreenAlign(Screen.ScreenAlign.BottomCenter).SetAlign(Screen.TextAlign.Left));
-            Game.SpriteList.Add(new TextSprite(testArray, 1, 1).SetScreenAlign(Screen.ScreenAlign.BottomRight).SetAlign(Screen.TextAlign.Center));
 
             Game.SpriteList.Add(new TextSprite(TestPlayer.Symbol.ToString(), TestPlayer.X, TestPlayer.Y));
 
