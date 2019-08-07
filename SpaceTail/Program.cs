@@ -531,41 +531,41 @@ namespace SpaceTail
                             switch(sprite.ScreenAlign)
                             {
                                 case Screen.ScreenAlign.TopLeft:
-                                    frameLines[sprite.Y + i + border.Size - 1].PutLine(sprite.Value[i], sprite.X + border.Size);
+                                    frameLines[sprite.Y + i + border.Size - 1].PutLine(sprite.GetLine(i), sprite.X + border.Size);
                                     break;
                                 case Screen.ScreenAlign.TopCenter:
-                                    frameLines[sprite.Y + i + border.Size - 1].PutLine(sprite.Value[i], sprite.X + Width / 2 - sprite.Width / 2 + 1);
+                                    frameLines[sprite.Y + i + border.Size - 1].PutLine(sprite.GetLine(i), sprite.X + Width / 2 - sprite.Width / 2 + 1);
                                     break;
                                 case Screen.ScreenAlign.TopRight:
-                                    frameLines[sprite.Y + i + border.Size - 1].PutReverseLine(sprite.Value[i], sprite.X + border.Size + margin, true);
+                                    frameLines[sprite.Y + i + border.Size - 1].PutReverseLine(sprite.GetLine(i), sprite.X + border.Size + margin, true);
                                     break;
                                 case Screen.ScreenAlign.BottomLeft:
                                     if ((Height - sprite.Y + i - border.Size + 1 - sprite.Height) >= 0)
                                     {
-                                        frameLines[Height - sprite.Y + i - border.Size + 1 - sprite.Height].PutLine(sprite.Value[i], sprite.X + border.Size);
+                                        frameLines[Height - sprite.Y + i - border.Size + 1 - sprite.Height].PutLine(sprite.GetLine(i), sprite.X + border.Size);
                                     }
                                     break;
                                 case Screen.ScreenAlign.BottomCenter:
                                     if ((Height - sprite.Y + i - border.Size + 1 - sprite.Height) >= 0)
                                     {
-                                        frameLines[Height - sprite.Y + i - border.Size + 1 - sprite.Height].PutLine(sprite.Value[i], sprite.X + Width / 2 - sprite.Width / 2 + 1);
+                                        frameLines[Height - sprite.Y + i - border.Size + 1 - sprite.Height].PutLine(sprite.GetLine(i), sprite.X + Width / 2 - sprite.Width / 2 + 1);
                                     }
                                     break;
                                 case Screen.ScreenAlign.BottomRight:
                                     if ((Height - sprite.Y + i - border.Size + 1 - sprite.Height) >= 0)
                                     {
                                         margin = sprite.Width - sprite.Value[i].Length;
-                                        frameLines[Height - sprite.Y + i - border.Size + 1 - sprite.Height].PutReverseLine(sprite.Value[i], sprite.X + border.Size + margin, true);
+                                        frameLines[Height - sprite.Y + i - border.Size + 1 - sprite.Height].PutReverseLine(sprite.GetLine(i), sprite.X + border.Size + margin, true);
                                     }
                                     break;
                                 case Screen.ScreenAlign.MiddleLeft:
-                                    frameLines[Height/2 - sprite.Height/2 + i + sprite.Y].PutLine(sprite.Value[i], sprite.X + border.Size);
+                                    frameLines[Height/2 - sprite.Height/2 + i + sprite.Y].PutLine(sprite.GetLine(i), sprite.X + border.Size);
                                     break;
                                 case Screen.ScreenAlign.MiddleCenter:
-                                    frameLines[Height/2 - sprite.Height/2 + i + sprite.Y].PutLine(sprite.Value[i], sprite.X + Width / 2 - sprite.Width / 2 + 1);
+                                    frameLines[Height/2 - sprite.Height/2 + i + sprite.Y].PutLine(sprite.GetLine(i), sprite.X + Width / 2 - sprite.Width / 2 + 1);
                                     break;
                                 case Screen.ScreenAlign.MiddleRight:
-                                    frameLines[Height/2 - sprite.Height/2 + i + sprite.Y].PutReverseLine(sprite.Value[i], sprite.X + border.Size + margin, true);
+                                    frameLines[Height/2 - sprite.Height/2 + i + sprite.Y].PutReverseLine(sprite.GetLine(i), sprite.X + border.Size + margin, true);
                                     break;
                             }
                         }
@@ -577,40 +577,40 @@ namespace SpaceTail
                             switch (sprite.ScreenAlign)
                             {
                                 case Screen.ScreenAlign.TopLeft:
-                                    frameLines[sprite.Y + i + border.Size - 1].PutReverseLine(sprite.Value[i], Width - (sprite.X + border.Size) - sprite.Width + 1, true);
+                                    frameLines[sprite.Y + i + border.Size - 1].PutReverseLine(sprite.GetLine(i), Width - (sprite.X + border.Size) - sprite.Width + 1, true);
                                     break;
                                 case Screen.ScreenAlign.TopCenter:
-                                    frameLines[sprite.Y + i + border.Size - 1].PutReverseLine(sprite.Value[i], sprite.X + Width / 2 - sprite.Width / 2 + 1, true);
+                                    frameLines[sprite.Y + i + border.Size - 1].PutReverseLine(sprite.GetLine(i), sprite.X + Width / 2 - sprite.Width / 2 + 1, true);
                                     break;
                                 case Screen.ScreenAlign.TopRight:
-                                    frameLines[sprite.Y + i + border.Size - 1].PutReverseLine(sprite.Value[i], (sprite.X + border.Size), true);
+                                    frameLines[sprite.Y + i + border.Size - 1].PutReverseLine(sprite.GetLine(i), (sprite.X + border.Size), true);
                                     break;
                                 case Screen.ScreenAlign.BottomLeft:
                                     if ((Height - sprite.Y + i - border.Size + 1 - sprite.Height) >= 0)
                                     {
-                                        frameLines[Height - sprite.Y + i - border.Size + 1 - sprite.Height].PutReverseLine(sprite.Value[i], Width - (sprite.X + border.Size) - sprite.Width + 1, true);
+                                        frameLines[Height - sprite.Y + i - border.Size + 1 - sprite.Height].PutReverseLine(sprite.GetLine(i), Width - (sprite.X + border.Size) - sprite.Width + 1, true);
                                     }
                                     break;
                                 case Screen.ScreenAlign.BottomCenter:
                                     if ((Height - sprite.Y + i - border.Size + 1 - sprite.Height) >= 0)
                                     {
-                                        frameLines[Height - sprite.Y + i - border.Size + 1 - sprite.Height].PutReverseLine(sprite.Value[i], sprite.X + Width / 2 - sprite.Width / 2 + 1, true);
+                                        frameLines[Height - sprite.Y + i - border.Size + 1 - sprite.Height].PutReverseLine(sprite.GetLine(i), sprite.X + Width / 2 - sprite.Width / 2 + 1, true);
                                     }
                                     break;
                                 case Screen.ScreenAlign.BottomRight:
                                     if ((Height - sprite.Y + i - border.Size + 1 - sprite.Height) >= 0)
                                     {
-                                        frameLines[Height - sprite.Y + i - border.Size + 1 - sprite.Height].PutReverseLine(sprite.Value[i], (sprite.X + border.Size), true);
+                                        frameLines[Height - sprite.Y + i - border.Size + 1 - sprite.Height].PutReverseLine(sprite.GetLine(i), (sprite.X + border.Size), true);
                                     }
                                     break;
                                 case Screen.ScreenAlign.MiddleLeft:
-                                    frameLines[Height / 2 - sprite.Height / 2 + i + sprite.Y].PutReverseLine(sprite.Value[i], Width - (sprite.X + border.Size) - sprite.Width + 1, true);
+                                    frameLines[Height / 2 - sprite.Height / 2 + i + sprite.Y].PutReverseLine(sprite.GetLine(i), Width - (sprite.X + border.Size) - sprite.Width + 1, true);
                                     break;
                                 case Screen.ScreenAlign.MiddleCenter:
-                                    frameLines[Height / 2 - sprite.Height / 2 + i + sprite.Y].PutReverseLine(sprite.Value[i], sprite.X + Width / 2 - sprite.Width / 2 + 1, true);
+                                    frameLines[Height / 2 - sprite.Height / 2 + i + sprite.Y].PutReverseLine(sprite.GetLine(i), sprite.X + Width / 2 - sprite.Width / 2 + 1, true);
                                     break;
                                 case Screen.ScreenAlign.MiddleRight:
-                                    frameLines[Height / 2 - sprite.Height / 2 + i + sprite.Y].PutReverseLine(sprite.Value[i], (sprite.X + border.Size), true);
+                                    frameLines[Height / 2 - sprite.Height / 2 + i + sprite.Y].PutReverseLine(sprite.GetLine(i), (sprite.X + border.Size), true);
                                     break;
                             }
                         }
@@ -623,40 +623,40 @@ namespace SpaceTail
                             switch (sprite.ScreenAlign)
                             {
                                 case Screen.ScreenAlign.TopLeft:
-                                    frameLines[sprite.Y + i + border.Size - 1].PutLine(sprite.Value[i], sprite.X + border.Size + leftMargin);
+                                    frameLines[sprite.Y + i + border.Size - 1].PutLine(sprite.GetLine(i), sprite.X + border.Size + leftMargin);
                                     break;
                                 case Screen.ScreenAlign.TopCenter:
-                                    frameLines[sprite.Y + i + border.Size - 1].PutLine(sprite.Value[i], sprite.X + Width / 2 - sprite.Width / 2 + leftMargin + 1);
+                                    frameLines[sprite.Y + i + border.Size - 1].PutLine(sprite.GetLine(i), sprite.X + Width / 2 - sprite.Width / 2 + leftMargin + 1);
                                     break;
                                 case Screen.ScreenAlign.TopRight:
-                                    frameLines[sprite.Y + i + border.Size - 1].PutReverseLine(sprite.Value[i], (sprite.X + border.Size) + leftMargin, true);
+                                    frameLines[sprite.Y + i + border.Size - 1].PutReverseLine(sprite.GetLine(i), (sprite.X + border.Size) + leftMargin, true);
                                     break;
                                 case Screen.ScreenAlign.BottomLeft:
                                     if ((Height - sprite.Y + i - border.Size + 1 - sprite.Height) >= 0)
                                     {
-                                        frameLines[Height - sprite.Y + i - border.Size + 1 - sprite.Height].PutLine(sprite.Value[i], sprite.X + border.Size + leftMargin);
+                                        frameLines[Height - sprite.Y + i - border.Size + 1 - sprite.Height].PutLine(sprite.GetLine(i), sprite.X + border.Size + leftMargin);
                                     }
                                     break;
                                 case Screen.ScreenAlign.BottomCenter:
                                     if ((Height - sprite.Y + i - border.Size + 1 - sprite.Height) >= 0)
                                     {
-                                        frameLines[Height - sprite.Y + i - border.Size + 1 - sprite.Height].PutLine(sprite.Value[i], sprite.X + Width / 2 - sprite.Width / 2 + leftMargin + 1);
+                                        frameLines[Height - sprite.Y + i - border.Size + 1 - sprite.Height].PutLine(sprite.GetLine(i), sprite.X + Width / 2 - sprite.Width / 2 + leftMargin + 1);
                                     }
                                     break;
                                 case Screen.ScreenAlign.BottomRight:
                                     if ((Height - sprite.Y + i - border.Size + 1 - sprite.Height) >= 0)
                                     {
-                                        frameLines[Height - sprite.Y + i - border.Size + 1 - sprite.Height].PutReverseLine(sprite.Value[i], (sprite.X + border.Size) + leftMargin, true);
+                                        frameLines[Height - sprite.Y + i - border.Size + 1 - sprite.Height].PutReverseLine(sprite.GetLine(i), (sprite.X + border.Size) + leftMargin, true);
                                     }
                                     break;
                                 case Screen.ScreenAlign.MiddleLeft:
-                                    frameLines[Height / 2 - sprite.Height / 2 + i + sprite.Y].PutLine(sprite.Value[i], sprite.X + border.Size + leftMargin);
+                                    frameLines[Height / 2 - sprite.Height / 2 + i + sprite.Y].PutLine(sprite.GetLine(i), sprite.X + border.Size + leftMargin);
                                     break;
                                 case Screen.ScreenAlign.MiddleCenter:
-                                    frameLines[Height / 2 - sprite.Height / 2 + i + sprite.Y].PutLine(sprite.Value[i], sprite.X + Width / 2 - sprite.Width / 2 + leftMargin + 1);
+                                    frameLines[Height / 2 - sprite.Height / 2 + i + sprite.Y].PutLine(sprite.GetLine(i), sprite.X + Width / 2 - sprite.Width / 2 + leftMargin + 1);
                                     break;
                                 case Screen.ScreenAlign.MiddleRight:
-                                    frameLines[Height / 2 - sprite.Height / 2 + i + sprite.Y].PutReverseLine(sprite.Value[i], (sprite.X + border.Size) + leftMargin, true);
+                                    frameLines[Height / 2 - sprite.Height / 2 + i + sprite.Y].PutReverseLine(sprite.GetLine(i), (sprite.X + border.Size) + leftMargin, true);
                                     break;
                             }
                         }
@@ -674,7 +674,7 @@ namespace SpaceTail
         Screen.TextAlign textAlign = Screen.TextAlign.Left;
         Screen.ScreenAlign screenAlign = Screen.ScreenAlign.TopLeft;
 
-        private List<string> value;
+        private List<StringBuilder> value;
         private int spriteWidth;
         private int spriteHeight;
 
@@ -683,7 +683,7 @@ namespace SpaceTail
 
         public int X { get => x; set => x = value; }
         public int Y { get => y; set => y = value; }
-        public List<string> Value { get => value; set => this.value = value; }
+        public List<StringBuilder> Value { get => value; set => this.value = value; }
         public int Width { get => spriteWidth; set => spriteWidth = value; }
         public int Height { get => spriteHeight; set => spriteHeight = value; }
         internal Screen.TextAlign TextAlign { get => textAlign; set => textAlign = value; }
@@ -732,32 +732,26 @@ namespace SpaceTail
 
         public void SetValue(string value)
         {
-            if (Value == null)
-            {
-                Value = new List<string>();
-            }
-            else
-            {
-                Value.Clear();
-            }
-
-            Value.Add(value);
-            Width = value.Length;
-            Height = Value.Count;
+            var newValue = new List<string>();
+            newValue.Add(value);
+            SetValue(newValue);
         }
 
         public void SetValue(List<string> value)
         {
             if (Value == null)
             {
-                Value = new List<string>();
+                Value = new List<StringBuilder>();
             }
             else
             {
                 Value.Clear();
             }
 
-            Value = value;
+            foreach (var line in value)
+            {
+                Value.Add(new StringBuilder(line));
+            }
 
             Width = 0;
             Height = Value.Count;
@@ -785,19 +779,20 @@ namespace SpaceTail
 
         internal void MakeBlank()
         {
-            var newValue = Value;
-
-            for (int i = 0; i < newValue.Count; i++)
+            foreach (var line in Value)
             {
-                newValue[i] = Input.GetEmptyLine(newValue[i].Length);
+                int lineLength = line.Length;
+                line.Clear();
+                line.Append(Input.GetEmptyLine(lineLength));
             }
+        }
 
-            //for (int i = 0; i < Value.Count; i++)
-            //{
-            //    Value[i] = Input.GetEmptyLine(Value[i].Length);
-            //}
-
-            Value = newValue;
+        public string GetLine(int lineIndex)
+        {
+            if (lineIndex >= 0 && lineIndex < Height)
+                return Value[lineIndex].ToString();
+            else
+                return $"[wrong line index: {lineIndex}]";
         }
     }
 
@@ -980,16 +975,16 @@ namespace SpaceTail
             */
 
             Game.SpriteList.Add(new TextSprite(testArray, 1, 1).SetScreenAlign(Screen.ScreenAlign.TopLeft).SetAlign(Screen.TextAlign.Left));
-            Game.SpriteList.Add(new TextSprite(testArray, 0, 1).SetScreenAlign(Screen.ScreenAlign.TopCenter).SetAlign(Screen.TextAlign.Left));
-            Game.SpriteList.Add(new TextSprite(testArray, 1, 1).SetScreenAlign(Screen.ScreenAlign.TopRight).SetAlign(Screen.TextAlign.Left));
+            Game.SpriteList.Add(new TextSprite(testArray, 0, 1).SetScreenAlign(Screen.ScreenAlign.TopCenter).SetAlign(Screen.TextAlign.Center));
+            Game.SpriteList.Add(new TextSprite(testArray, 1, 1).SetScreenAlign(Screen.ScreenAlign.TopRight).SetAlign(Screen.TextAlign.Right));
 
-            Game.SpriteList.Add(new TextSprite(testArray, 1, 0).SetScreenAlign(Screen.ScreenAlign.MiddleLeft).SetAlign(Screen.TextAlign.Left));
-            Game.SpriteList.Add(new TextSprite(testArray, 0, 0).SetScreenAlign(Screen.ScreenAlign.MiddleCenter).SetAlign(Screen.TextAlign.Left));
+            Game.SpriteList.Add(new TextSprite(testArray, 1, 0).SetScreenAlign(Screen.ScreenAlign.MiddleLeft).SetAlign(Screen.TextAlign.Center));
+            Game.SpriteList.Add(new TextSprite(testArray, 0, 0).SetScreenAlign(Screen.ScreenAlign.MiddleCenter).SetAlign(Screen.TextAlign.Right));
             Game.SpriteList.Add(new TextSprite(testArray, 1, 0).SetScreenAlign(Screen.ScreenAlign.MiddleRight).SetAlign(Screen.TextAlign.Left));
 
-            Game.SpriteList.Add(new TextSprite(testArray, 1, 1).SetScreenAlign(Screen.ScreenAlign.BottomLeft).SetAlign(Screen.TextAlign.Left));
+            Game.SpriteList.Add(new TextSprite(testArray, 1, 1).SetScreenAlign(Screen.ScreenAlign.BottomLeft).SetAlign(Screen.TextAlign.Right));
             Game.SpriteList.Add(new TextSprite(testArray, 0, 1).SetScreenAlign(Screen.ScreenAlign.BottomCenter).SetAlign(Screen.TextAlign.Left));
-            Game.SpriteList.Add(new TextSprite(testArray, 1, 1).SetScreenAlign(Screen.ScreenAlign.BottomRight).SetAlign(Screen.TextAlign.Left));
+            Game.SpriteList.Add(new TextSprite(testArray, 1, 1).SetScreenAlign(Screen.ScreenAlign.BottomRight).SetAlign(Screen.TextAlign.Center));
 
             Game.SpriteList.Add(new TextSprite(TestPlayer.Symbol.ToString(), TestPlayer.X, TestPlayer.Y));
 
