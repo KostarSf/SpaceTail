@@ -35,18 +35,20 @@ namespace SpaceTail.Game
 
         private Dictionary<string, Scene> scenesList;
 
-        private Scene currentScene;
-
         private TextManager text;
+
+        private GameCore core;
 
         public GameManager()
         {
             text = new TextManager().SetLanguage(TextManager.Language.Russian);
-
             scenesList = new Dictionary<string, Scene>();
+            core = new GameCore();
 
             AddLocalizedNames();
             AddMenuScenes();
+
+            core.Init();
         }
 
         private void AddLocalizedNames()
@@ -131,8 +133,14 @@ namespace SpaceTail.Game
         {
             if (scenesList.ContainsKey(sceneName))
             {
-                currentScene = scenesList[sceneName];
+                
+                core.SetScene(scenesList[sceneName]);
             }
+        }
+
+        internal void SetDefaultScene()
+        {
+            SetCurrentScene("Menu_Main");
         }
 
         internal GameManager SetArgs(string[] args)
@@ -143,13 +151,18 @@ namespace SpaceTail.Game
 
         internal void StartGame()
         {
-            Screen.Init();
-            Game.StartGame();
+            if (core.CurrentScene == null)
+            {
+                SetDefaultScene();
+            }
+
+            //Game.StartGame();
+            core.Start();
         }
 
         internal void StopGame()
         {
-
+            core.Stop();
         }
     }
 }
