@@ -10,7 +10,7 @@ namespace SpaceTail.Game
         {
             "Welcome to [DarkBlue,]SpaceTail[Reset,]!",
             "Created by [DarkGray,]KostarSf",
-            "Version " + SpaceTail.appVersion,
+            "Version " + Variables.APP_VERSION,
             "",
             " - Menu -",
             "1. Start game",
@@ -20,7 +20,7 @@ namespace SpaceTail.Game
 
         static string[] devMenu_about =
         {
-            "[DarkBlue,]SpaceTail[Reset,] " + SpaceTail.appVersion,
+            "[DarkBlue,]SpaceTail[Reset,] " + Variables.APP_VERSION,
             "Created by [DarkGray,]KostarSf",
             "",
             "[DarkGray,]A story about one pony",

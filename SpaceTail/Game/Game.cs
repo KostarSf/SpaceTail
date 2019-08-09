@@ -198,7 +198,7 @@ namespace SpaceTail.Game
             Game.SpriteList.Add(new TextSprite("arrows - the 'X' control", 2, 4));
 
             Game.SpriteList.Add(new TextSprite("by KostarSf", 2, 1).SetScreenAlign(Screen.ScreenAlign.BottomLeft));
-            Game.SpriteList.Add(new TextSprite(SpaceTail.appVersion, 2, 1).SetScreenAlign(Screen.ScreenAlign.BottomRight));
+            Game.SpriteList.Add(new TextSprite(Variables.APP_VERSION, 2, 1).SetScreenAlign(Screen.ScreenAlign.BottomRight));
 
             Game.SpriteList.Add(new TextSprite(testArray, 0, 0).SetAlign(Screen.TextAlign.Center).SetScreenAlign(Screen.ScreenAlign.MiddleCenter));
 
