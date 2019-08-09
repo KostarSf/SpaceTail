@@ -6,11 +6,13 @@ namespace SpaceTail.Game.Scenes
 {
     class Scene
     {
-        public string Name { get; }
+        private string _name;
+
+        public string Name { get => _name; }
 
         public Scene(string sceneName)
         {
-            Name = sceneName;
+            _name = sceneName;
         }
     }
 }
