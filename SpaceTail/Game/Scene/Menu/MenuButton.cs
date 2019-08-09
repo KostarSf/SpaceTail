@@ -19,6 +19,10 @@ namespace SpaceTail.Game
 
         private int _buttonWidth;
 
+        internal delegate void ButtonAction();
+        private ButtonAction _action;
+        private bool _canAct;
+
         public string Text { get => _text; }
 
         internal GameManager.Menu LinkedMenu { get => _linkedMenu; }
@@ -32,6 +36,7 @@ namespace SpaceTail.Game
         public string RightEdge { get => _rightEdge; }
 
         public int ButtonWidth { get => _buttonWidth; }
+        public bool CanAct { get => _canAct;}
 
         public MenuButton(string buttonText)
         {
@@ -46,6 +51,8 @@ namespace SpaceTail.Game
             SetEdges("*");
 
             SetWidth(28);
+
+            SetActioning(false);
         }
 
         private MenuButton SetWidth(int width)
@@ -114,6 +121,28 @@ namespace SpaceTail.Game
         {
             _leftEdge = leftEdge;
             _rightEdge = rightEdge;
+
+            return this;
+        }
+
+        internal MenuButton SetAction(ButtonAction action)
+        {
+            _action = action;
+            SetActioning(true);
+
+            return this;
+        }
+
+        internal MenuButton DoAction()
+        {
+            _action();
+
+            return this;
+        }
+
+        internal MenuButton SetActioning(bool state)
+        {
+            _canAct = state;
 
             return this;
         }
