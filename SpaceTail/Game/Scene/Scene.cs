@@ -14,5 +14,20 @@ namespace SpaceTail.Game.Scenes
         {
             _name = sceneName;
         }
+
+        public virtual void OnLogicUpdate(long ticksPassed)
+        {
+
+        }
+
+        public virtual void OnKeyPressed(ConsoleKeyInfo key)
+        {
+
+        }
+
+        public virtual void OnFrameDraw(/* Frame frame */)
+        {
+
+        }
     }
 }
