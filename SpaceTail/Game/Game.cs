@@ -5,8 +5,9 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using static SpaceTail.Game.ConsoleMenu;
 
-namespace SpaceTail
+namespace SpaceTail.Game
 {
     class Game
     {
@@ -33,6 +34,11 @@ namespace SpaceTail
 
         public static void StartGame()
         {
+            Console.Title = "SpaceTail";
+
+            Screen.HideCursor();
+            Screen.Clear();
+
             testArray.Add("SpaceTail");
             testArray.Add("The story of one pony");
 
@@ -103,7 +109,7 @@ namespace SpaceTail
 
             inputCycle.Wait();
             inputCycle.Dispose();
-            SpaceTail.DrawConsoleMenu(SpaceTail.Menu.DevMenu);
+            DrawConsoleMenu(Menu.DevMenu);
         }
 
         private static void UpdateLogic()
