@@ -35,6 +35,8 @@ namespace SpaceTail.Game
 
         private Dictionary<string, Scene> scenesList;
 
+        private Scene currentScene;
+
         private TextManager text;
 
         public GameManager()
@@ -111,11 +113,26 @@ namespace SpaceTail.Game
 
                     new MenuBackTo(text.GetMenuText("Back"), Menu.Main).Selected()
                 ));
+
+            AddScene(new MenuScene("Menu_Exit", Menu.Exit).AddMenuItems(
+                    new MenuTitle(text.GetMenuText("ExitTitle")),
+
+                    new MenuButton(text.GetMenuText("Yes")).SetAction(() => StopGame()),
+                    new MenuBackTo(text.GetMenuText("No"), Menu.Main)
+                ));
         }
 
-        private void AddScene(Scene scene)
+        internal void AddScene(Scene scene)
         {
-            throw new NotImplementedException();
+            scenesList.Add(scene.Name, scene);
+        }
+
+        internal void SetCurrentScene(string sceneName)
+        {
+            if (scenesList.ContainsKey(sceneName))
+            {
+                currentScene = scenesList[sceneName];
+            }
         }
 
         internal GameManager SetArgs(string[] args)
@@ -124,9 +141,15 @@ namespace SpaceTail.Game
             return this;
         }
 
-        internal void Start()
+        internal void StartGame()
         {
             Screen.Init();
+            Game.StartGame();
+        }
+
+        internal void StopGame()
+        {
+
         }
     }
 }
