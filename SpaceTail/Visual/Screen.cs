@@ -53,12 +53,12 @@ namespace SpaceTail
             Colors.Add("WHITE",         ConsoleColor.White);
             Colors.Add("YELLOW",        ConsoleColor.Yellow);
 
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
-                Console.SetWindowSize(70, 20);
-                Console.SetBufferSize(70, 20);
-                Console.SetWindowSize(70, 20);  // Убирает отступ от скролла
-            }
+            //if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            //{
+            //    Console.SetWindowSize(70, 20);
+            //    Console.SetBufferSize(70, 20);
+            //    Console.SetWindowSize(70, 20);  // Убирает отступ от скролла
+            //}
 
             Console.Title = "SpaceTail";
         }
