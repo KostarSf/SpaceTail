@@ -38,7 +38,7 @@ namespace SpaceTail.Game
 
         internal string GetMenuText(string text)
         {
-            if (Menu[text][CurrentLanguage] != null)
+            if (Menu.ContainsKey(text) && Menu[text].ContainsKey(CurrentLanguage))
             {
                 return Menu[text][CurrentLanguage];
             }
