@@ -12,7 +12,7 @@ namespace SpaceTail
 
         public SpaceTail(string[] args)
         {
-            var manager = new Game.GameManager().SetArgs(args);
+            var manager = new GameManager().SetArgs(args);
             manager.SetCurrentScene("Menu_Main");
             manager.StartGame();
         }
