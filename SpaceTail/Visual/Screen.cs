@@ -33,6 +33,8 @@ namespace SpaceTail
 
         static string leftMargin = " ";
 
+        public static string Title { get => Console.Title; set => Console.Title = value; }
+
         public static void Init()
         {
             Colors = new Dictionary<string, ConsoleColor>();
