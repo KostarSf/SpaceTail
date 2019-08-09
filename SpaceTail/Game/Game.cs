@@ -7,6 +7,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using static SpaceTail.Game.ConsoleMenu;
 
+// Старый класс, должен быть упразднён
+
 namespace SpaceTail.Game
 {
     class Game
@@ -34,7 +36,7 @@ namespace SpaceTail.Game
 
         public static void StartGame()
         {
-            Console.Title = "SpaceTail";
+            Screen.Title = "SpaceTail";
 
             Screen.HideCursor();
             Screen.Clear();
@@ -192,18 +194,7 @@ namespace SpaceTail.Game
 
             Game.SpriteList.Clear();
             
-            Game.SpriteList.Add(new TextSprite(Game.GetFPS(frame), 2, 1));
-            Game.SpriteList.Add(new TextSprite("'q' to quit", 2, 2));
-            Game.SpriteList.Add(new TextSprite("1, 2, 3, 6, 9, 0 - time control", 2, 3));
-            Game.SpriteList.Add(new TextSprite("arrows - the 'X' control", 2, 4));
-
-            Game.SpriteList.Add(new TextSprite("by KostarSf", 2, 1).SetScreenAlign(Screen.ScreenAlign.BottomLeft));
-            Game.SpriteList.Add(new TextSprite(Variables.APP_VERSION, 2, 1).SetScreenAlign(Screen.ScreenAlign.BottomRight));
-
-            Game.SpriteList.Add(new TextSprite(testArray, 0, 0).SetAlign(Screen.TextAlign.Center).SetScreenAlign(Screen.ScreenAlign.MiddleCenter));
-
-            Game.SpriteList.Add(new TextSprite(TestPlayer.Symbol.ToString(), TestPlayer.X, TestPlayer.Y).SetColors(ConsoleColor.Red, Input.GetDefaultBackgroundColor()));
-
+            
             //Слежение за обновлением размера консоли
 
             if (Console.WindowWidth != lastWindowWidth)
@@ -229,6 +220,19 @@ namespace SpaceTail.Game
                 }
                 frame.FitSizesToWindow();
             }
+
+            Game.SpriteList.Add(new TextSprite(Game.GetFPS(frame), 2, 1));
+            Game.SpriteList.Add(new TextSprite("'q' to quit", 2, 2));
+            Game.SpriteList.Add(new TextSprite("1, 2, 3, 6, 9, 0 - time control", 2, 3));
+            Game.SpriteList.Add(new TextSprite("arrows - the 'X' control", 2, 4));
+
+            Game.SpriteList.Add(new TextSprite("by KostarSf", 2, 1).SetScreenAlign(Screen.ScreenAlign.BottomLeft));
+            Game.SpriteList.Add(new TextSprite(Variables.APP_VERSION, 2, 1).SetScreenAlign(Screen.ScreenAlign.BottomRight));
+
+            Game.SpriteList.Add(new TextSprite(testArray, 0, 0).SetAlign(Screen.TextAlign.Center).SetScreenAlign(Screen.ScreenAlign.MiddleCenter));
+
+            Game.SpriteList.Add(new TextSprite(TestPlayer.Symbol.ToString(), TestPlayer.X, TestPlayer.Y).SetColors(ConsoleColor.Red, Input.GetDefaultBackgroundColor()));
+
 
             //Вывод графики
 
