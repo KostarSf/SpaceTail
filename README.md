@@ -1,4 +1,4 @@
-![SpaceTail logo.png](https://db3pap003files.storage.live.com/y4pZ8SfU8Kqriaf9QXm7VRMQTF1oS4e168bEl3e-lj1aKprN-7FBfcmhQNwPpKQ0tvIWkvxsw3HBonGvGadvWsZfYzAGiEUIkVQKSM-Bh5ggYNMghjxtCM1X_nlqgfQ5cvJzu5v1eGtJUu4kupG3ChdhFg0lKQB1gxuVT0qdIshYtVoi7D3hTThXW2kS4mOrXgh/spacetaillogo.png?psid=1&width=670&height=400)
+![SpaceTail logo.png](https://github.com/KostarSf/SpaceTail/blob/master/docs/img/spacetaillogo.png)
 
 # SpaceTail: *The story of one pony*
 
